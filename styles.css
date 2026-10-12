@@ -181,3 +181,15 @@ h2 { margin: 0; color: var(--primary-deep); font-family: Georgia, "Times New Rom
 @media (max-width: 560px) { .faq-section { padding: 52px 0 58px; } .faq-container { width: min(100% - 36px, 480px); } .faq-heading { margin-bottom: 22px; } .faq-subtitle { font-size: 14px; line-height: 1.65; } .faq-search { min-height: 50px; } .faq-toolbar { align-items: flex-start; flex-direction: column; gap: 2px; margin-top: 6px; } .faq-bulk-actions { align-self: flex-end; gap: 10px; } .faq-question { min-height: 60px; padding: 15px 16px; font-size: 14px; } .faq-answer-inner { padding-right: 16px; padding-left: 16px; font-size: 13px; } .faq-answer.is-open .faq-answer-inner { padding-bottom: 16px; } .faq-process summary { padding: 13px 16px; font-size: 14px; } .faq-process-content { padding: 0 16px 16px; } .faq-steps li { grid-template-columns: 31px minmax(0, 1fr); gap: 10px; } .faq-step-number { width: 29px; height: 29px; } }
 @media (prefers-reduced-motion: reduce) { .faq-answer, .faq-question svg, .faq-icon-vertical { transition: none !important; }
 }
+/* Visitor statistics */
+.visitor-section{padding:0 0 64px;background:var(--surface)}
+.visitor-panel{width:min(1160px,calc(100% - 56px));margin:0 auto;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);align-items:center;gap:32px;padding:28px 32px;border:1px solid var(--line);border-radius:18px;background:var(--white);box-shadow:0 8px 26px rgb(43 96 119 / 5%)}
+.visitor-heading h2{margin-top:8px;font-size:27px}
+.visitor-note{margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
+.visitor-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.visitor-stat{min-height:90px;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:14px 16px;border:1px solid var(--line);border-radius:13px;background:var(--surface)}
+.visitor-label{color:var(--muted);font-size:12px;line-height:1.4}
+.visitor-stat strong{color:var(--primary-deep);font-family:Georgia,serif;font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+@media(max-width:780px){.visitor-panel{grid-template-columns:1fr;gap:20px}}
+@media(max-width:560px){.visitor-section{padding-bottom:48px}.visitor-panel{width:min(100% - 36px,480px);gap:17px;padding:22px 20px;border-radius:15px}.visitor-heading h2{font-size:24px}.visitor-stats{gap:9px}.visitor-stat{min-height:82px;padding:12px}.visitor-label{font-size:11px}.visitor-stat strong{font-size:23px}}
+@media(max-width:360px){.visitor-panel{width:calc(100% - 28px)}.visitor-stats{grid-template-columns:1fr}.visitor-stat{min-height:70px}}
