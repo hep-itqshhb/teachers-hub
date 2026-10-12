@@ -4,6 +4,11 @@
  */
 const HUB_CONFIG = Object.freeze({
   siteName: "ITQSHHB Teacher's Hub",
+  analytics: Object.freeze({
+    // Masukkan URL tapak GoatCounter ITQSHHB selepas tapak didaftarkan.
+    // Contoh format sahaja: https://kod-anda.goatcounter.com
+    goatcounterSite: ""
+  }),
   links: Object.freeze({
     disiplin: "https://forms.gle/vK4N22ELNCywPM2Z7",
     hafazan: "https://forms.gle/jymEJZBK3dqrMZ7SA",
