@@ -27,7 +27,7 @@ a { color: inherit; }
 .header-inner, .footer-inner { width: min(1160px, calc(100% - 56px)); margin: auto; }
 .header-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; min-height: 52px; }
-.brand-logo { display: block; width: 48px; height: 48px; object-fit: contain; border-radius: 50%; background: #fff; }
+.brand-logo { display: block; width: 48px; height: 48px; object-fit: contain; border-radius: 50%; }
 .brand-copy { display: grid; gap: 3px; }
 .brand-copy strong { color: #fff; text-shadow: 0 1px 8px rgb(0 0 0 / 24%); font-family: Georgia, "Times New Roman", serif; font-size: 19px; font-weight: 600; letter-spacing: -.03em; }
 .brand-copy span { color: rgb(255 255 255 / 84%); font-size: 11px; letter-spacing: .14em; }
@@ -82,7 +82,7 @@ h2 { margin: 0; color: var(--primary-deep); font-family: Georgia, "Times New Rom
 .site-footer { border-top: 1px solid var(--line); background: #EEF2F3; }
 .footer-inner { padding: 28px 0 17px; }
 .footer-brand { display: flex; align-items: center; gap: 11px; }
-.footer-brand img { flex: 0 0 38px; object-fit: contain; border-radius: 50%; background: #fff; }
+.footer-brand img { flex: 0 0 38px; object-fit: contain; border-radius: 50%; }
 .footer-brand strong { color: var(--primary-deep); font-family: Georgia, serif; font-size: 15px; font-weight: 600; }
 .footer-brand strong span { color: var(--muted); font-family: inherit; font-size: 13px; }
 .footer-brand p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
