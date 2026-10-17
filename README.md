@@ -32,6 +32,24 @@ links: {
 }
 ```
 
+## Tarikh, pengumuman dan status pautan
+
+Kandungan operasi disimpan dalam `config.js`:
+
+- `importantDates` memaparkan tarikh akan datang dan menyembunyikan tarikh yang sudah mansuh secara automatik.
+- `announcements` memaparkan makluman aktif; gunakan `expiresAt` untuk menyembunyikan makluman selepas tarikh tertentu.
+- `serviceStatus` menerima status `active`, `maintenance` atau `closed` bagi setiap perkhidmatan.
+
+Untuk mengurus kandungan melalui Google Sheet, cipta helaian dengan lajur `type,title,date,summary,link,status,expiresAt`, pilih **File > Share > Publish to web > CSV**, kemudian masukkan URL CSV tersebut pada `contentFeedUrl`. Gunakan `date` untuk tarikh penting dan `announcement` untuk pengumuman pada lajur `type`. Jangan terbitkan nama pelajar, laporan atau maklumat sulit melalui helaian awam ini.
+
+## Pemasangan pada telefon
+
+Teacher's Hub dilengkapi web app manifest dan service worker. Pelayar yang menyokong pemasangan akan memaparkan butang **Pasang**. Halaman utama dan aset penting boleh dibuka semula apabila sambungan terganggu; penghantaran borang masih memerlukan Internet.
+
+## Firebase Hosting
+
+Laman produksi menggunakan `https://teachershub-itq.web.app`. Konfigurasi Firebase turut menetapkan security headers, dasar sumber kandungan dan cache aset statik.
+
 ## Imej hero
 
 Imej hero yang dibekalkan disimpan sebagai `hero-itqshhb.webp` dalam format termampat supaya keseluruhan menara jelas kelihatan dan masa muat turun lebih singkat. Teks hero dipaparkan di bawah imej dan tidak dicetak pada imej.ntuk memendekkan masa muat turun. Teks hero dipaparkan di bawah imej dan tidak dicetak pada imej.
@@ -62,3 +80,4 @@ Tema visual laman menggunakan warna daripada template yang dibekalkan: Calypso (
 ## Soalan Lazim
 
 Bahagian Soalan Lazim dan fungsi carian, penapis kategori serta paparan proses laporan dikendalikan oleh `faq.js`. Kandungan FAQ boleh dikemas kini dalam senarai data pada fail tersebut.
+
