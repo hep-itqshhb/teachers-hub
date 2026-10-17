@@ -1,4 +1,4 @@
-import { getAuth, GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut } from "firebase/auth";
+import { getAuth, getRedirectResult, GoogleAuthProvider, onAuthStateChanged, signInWithRedirect, signOut } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore/lite";
 import { ADMIN_EMAIL, app, db } from "./firebase-client.js";
 
@@ -106,12 +106,14 @@ byId("google-login").addEventListener("click", async () => {
   try {
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account", login_hint: ADMIN_EMAIL });
-    await signInWithPopup(auth, provider);
+    await signInWithRedirect(auth, provider);
   } catch (error) {
-    setStatus(error.code === "auth/popup-closed-by-user"
-      ? "Log masuk dibatalkan. Cuba lagi apabila sedia."
-      : `Log masuk gagal: ${error.message}`, "error");
+    setStatus(`Log masuk gagal: ${error.message}`, "error");
   }
+});
+
+getRedirectResult(auth).catch((error) => {
+  setStatus(`Log masuk gagal: ${error.message}`, "error");
 });
 
 byId("sign-out").addEventListener("click", () => signOut(auth));
