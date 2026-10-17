@@ -1,0 +1,5 @@
+node_modules/
+assets/
+.firebase/
+firebase-debug.log
+gha-creds-*.json

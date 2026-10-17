@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ms-BN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123f34">
+  <meta name="robots" content="noindex">
+  <title>Admin | Teacher's Hub ITQSHHB</title>
+  <link rel="icon" href="logo-itqshhb.png">
+  <link rel="stylesheet" href="admin.css?v=1">
+  <script src="config.js?v=2" defer></script>
+  <script src="assets/admin.js?v=1" defer></script>
+</head>
+<body>
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <a class="admin-brand" href="/" aria-label="Kembali ke Teacher's Hub">
+        <img src="logo-itqshhb.png" alt="" width="46" height="46">
+        <span><strong>Teacher's Hub</strong><small>ITQSHHB · Ruang Admin</small></span>
+      </a>
+      <a class="header-link" href="/">← Laman utama</a>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="page-intro">
+      <p class="eyebrow">PENGURUSAN KANDUNGAN</p>
+      <h1>Ruang Admin</h1>
+      <p>Urus Tarikh Penting dan Makluman Warga Pendidik terus dari Teacher's Hub.</p>
+    </div>
+
+    <p id="admin-status" class="admin-status" role="status" aria-live="polite" hidden></p>
+
+    <section id="login-view" class="auth-card" aria-labelledby="login-title">
+      <div class="auth-icon" aria-hidden="true">✦</div>
+      <h2 id="login-title">Log masuk sebagai admin</h2>
+      <p>Gunakan akaun Google admin yang telah didaftarkan untuk menerbitkan perubahan.</p>
+      <button id="google-login" class="primary-button" type="button">Log masuk dengan Google</button>
+    </section>
+
+    <section id="denied-view" class="auth-card" aria-labelledby="denied-title" hidden>
+      <h2 id="denied-title">Akses admin tidak tersedia</h2>
+      <p><strong id="denied-email"></strong> tidak diberikan akses untuk mengubah kandungan.</p>
+      <button id="denied-sign-out" class="secondary-button" type="button">Log keluar dan tukar akaun</button>
+    </section>
+
+    <section id="editor-view" hidden>
+      <div class="editor-toolbar">
+        <p>Log masuk sebagai <strong id="admin-email"></strong></p>
+        <button id="sign-out" class="text-button" type="button">Log keluar</button>
+      </div>
+
+      <form id="content-form">
+        <section class="editor-section" aria-labelledby="dates-title">
+          <div class="section-heading">
+            <div><p class="eyebrow">01 · JADUAL</p><h2 id="dates-title">Tarikh penting</h2><p>Tarikh yang sudah berlalu akan hilang sendiri daripada laman utama.</p></div>
+            <button id="add-date" class="secondary-button" type="button">+ Tambah tarikh</button>
+          </div>
+          <p class="entry-count" id="date-count"></p>
+          <div id="date-list" class="entry-list"></div>
+        </section>
+
+        <section class="editor-section" aria-labelledby="announcements-title">
+          <div class="section-heading">
+            <div><p class="eyebrow">02 · BERITA</p><h2 id="announcements-title">Makluman warga pendidik</h2><p>Makluman terbaru akan dipaparkan dahulu. Tarikh tamat boleh dibiarkan kosong.</p></div>
+            <button id="add-announcement" class="secondary-button" type="button">+ Tambah makluman</button>
+          </div>
+          <p class="entry-count" id="announcement-count"></p>
+          <div id="announcement-list" class="entry-list"></div>
+        </section>
+
+        <div class="save-bar">
+          <p>Perubahan muncul di laman utama selepas disimpan.</p>
+          <button id="save-content" class="primary-button" type="submit">Simpan perubahan</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <template id="date-template">
+    <article class="admin-entry">
+      <div class="entry-top"><span class="entry-type">Tarikh penting</span><button class="remove-entry" type="button" aria-label="Buang tarikh ini">Buang</button></div>
+      <div class="field-grid">
+        <label class="field field-wide">Tajuk<input name="title" type="text" required maxlength="120" placeholder="Contoh: Tarikh akhir tempahan aktiviti"></label>
+        <label class="field">Tarikh dan masa (Brunei)<input name="date" type="datetime-local" required></label>
+        <label class="field">Label tarikh<input name="label" type="text" maxlength="40" placeholder="Tarikh akhir"></label>
+      </div>
+      <label class="switch-line"><input name="active" type="checkbox" checked><span>Paparkan di laman utama</span></label>
+    </article>
+  </template>
+
+  <template id="announcement-template">
+    <article class="admin-entry">
+      <div class="entry-top"><span class="entry-type">Makluman</span><button class="remove-entry" type="button" aria-label="Buang makluman ini">Buang</button></div>
+      <div class="field-grid">
+        <label class="field field-wide">Tajuk<input name="title" type="text" required maxlength="120" placeholder="Contoh: Makluman mesyuarat guru"></label>
+        <label class="field">Tarikh makluman<input name="date" type="date" required></label>
+        <label class="field">Tamat paparan (pilihan, waktu Brunei)<input name="expiresAt" type="datetime-local"></label>
+        <label class="field field-wide">Ringkasan<textarea name="summary" required maxlength="500" rows="3" placeholder="Tulis maklumat ringkas untuk warga pendidik."></textarea></label>
+        <label class="field">Pautan HTTPS (pilihan)<input name="link" type="url" maxlength="500" pattern="https://.*" placeholder="https://..."></label>
+        <label class="field">Teks butang pautan (pilihan)<input name="linkLabel" type="text" maxlength="80" placeholder="Baca selanjutnya"></label>
+      </div>
+      <label class="switch-line"><input name="active" type="checkbox" checked><span>Paparkan di laman utama</span></label>
+    </article>
+  </template>
+</body>
+</html>

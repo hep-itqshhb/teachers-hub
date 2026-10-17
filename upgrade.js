@@ -61,6 +61,14 @@
       importantDates: [...(HUB_CONFIG.importantDates || [])],
       announcements: [...(HUB_CONFIG.announcements || [])]
     };
+    if (window.hubContentStore) {
+      try {
+        const liveContent = await window.hubContentStore.load();
+        if (liveContent) return liveContent;
+      } catch (error) {
+        console.warn("Kandungan Firebase tidak dapat dimuatkan; menggunakan kandungan sandaran.", error);
+      }
+    }
     const feedUrl = safeUrl(HUB_CONFIG.contentFeedUrl);
     if (!feedUrl) return fallback;
     try {

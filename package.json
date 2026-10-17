@@ -1,0 +1,14 @@
+{
+  "name": "teachers-hub",
+  "private": true,
+  "version": "2.0.0",
+  "scripts": {
+    "build": "esbuild src/public-content.js src/admin.js --bundle --format=iife --outdir=assets --minify --target=es2020"
+  },
+  "dependencies": {
+    "firebase": "13.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12"
+  }
+}

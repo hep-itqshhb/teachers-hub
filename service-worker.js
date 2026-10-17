@@ -1,12 +1,16 @@
-const CACHE_NAME = "teachers-hub-v4";
+const CACHE_NAME = "teachers-hub-v5";
 const APP_SHELL = [
   "/",
   "/index.html",
+  "/admin.html",
+  "/admin.css?v=1",
   "/styles.css?v=11",
   "/upgrade.css?v=2",
-  "/config.js",
+  "/config.js?v=2",
   "/app.js?v=6",
-  "/upgrade.js?v=1",
+  "/assets/public-content.js?v=1",
+  "/assets/admin.js?v=1",
+  "/upgrade.js?v=2",
   "/faq.js?v=3",
   "/logo-itqshhb.png",
   "/app-icon.svg",
@@ -29,10 +33,12 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
   if (event.request.mode === "navigate") {
     event.respondWith(fetch(event.request, { cache: "no-store" }).then((response) => {
-      const copy = response.clone();
-      caches.open(CACHE_NAME).then((cache) => cache.put("/index.html", copy));
+      if (response.ok) {
+        const fallbackPath = requestUrl.pathname === "/admin.html" ? "/admin.html" : "/index.html";
+        caches.open(CACHE_NAME).then((cache) => cache.put(fallbackPath, response.clone()));
+      }
       return response;
-    }).catch(() => caches.match("/index.html")));
+    }).catch(() => caches.match(requestUrl.pathname === "/admin.html" ? "/admin.html" : "/index.html")));
     return;
   }
   event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {

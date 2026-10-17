@@ -11,6 +11,7 @@
       "package-lock.json",
       "README.md",
       "src/**",
+      "gha-creds-*.json",
       "firebase-debug.log",
       "**/.*",
       "**/node_modules/**"
