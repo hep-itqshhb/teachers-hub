@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ms-BN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123f34">
+  <meta name="description" content="Log masuk ke Teacher's Hub ITQSHHB.">
+  <title>Log Masuk | Teacher's Hub ITQSHHB</title>
+  <link rel="icon" type="image/svg+xml" href="app-icon.svg">
+  <link rel="stylesheet" href="auth.css?v=1">
+  <script src="assets/auth.js?v=1" defer></script>
+</head>
+<body>
+  <main class="auth-shell">
+    <section class="auth-visual" aria-labelledby="welcome-title">
+      <img src="hero-itqshhb.webp?v=7" alt="Bangunan Institut Tahfiz Al-Quran Sultan Haji Hassanal Bolkiah" width="1366" height="768">
+      <div class="auth-visual-shade"></div>
+      <div class="auth-brand">
+        <img src="logo-itqshhb.png" alt="" width="58" height="58">
+        <div><strong>Teacher's Hub</strong><span>ITQSHHB</span></div>
+      </div>
+      <div class="auth-welcome">
+        <p>RUANG DIGITAL WARGA PENDIDIK</p>
+        <h1 id="welcome-title">Segala Keperluan Guru,<br><em>Di Satu Tempat.</em></h1>
+        <span>Akses khas untuk warga pendidik yang menggunakan e-mel rasmi edu.bn.</span>
+      </div>
+    </section>
+
+    <section class="auth-panel" aria-label="Akaun Teacher's Hub">
+      <div class="auth-card">
+        <div id="auth-forms">
+          <p class="auth-kicker">SELAMAT DATANG</p>
+          <h2 id="auth-heading">Log masuk</h2>
+          <p class="auth-intro" id="auth-intro">Gunakan akaun Teacher's Hub biskita untuk meneruskan.</p>
+
+          <div class="auth-tabs" role="tablist" aria-label="Pilihan akaun">
+            <button class="auth-tab is-active" id="login-tab" type="button" role="tab" aria-selected="true" aria-controls="login-form">Log masuk</button>
+            <button class="auth-tab" id="register-tab" type="button" role="tab" aria-selected="false" aria-controls="register-form">Daftar</button>
+          </div>
+
+          <form id="login-form" class="auth-form" aria-labelledby="auth-heading">
+            <label for="login-email">E-mel edu.bn</label>
+            <input id="login-email" name="email" type="email" inputmode="email" autocomplete="username" placeholder="nama@edu.bn" required>
+            <label for="login-password">Kata laluan</label>
+            <div class="password-field">
+              <input id="login-password" name="password" type="password" autocomplete="current-password" minlength="8" required>
+              <button type="button" data-password-toggle="login-password" aria-label="Tunjukkan kata laluan">Lihat</button>
+            </div>
+            <button class="auth-submit" type="submit">Log masuk</button>
+            <button class="auth-link-button" id="forgot-password" type="button">Lupa kata laluan?</button>
+          </form>
+
+          <form id="register-form" class="auth-form" hidden aria-labelledby="auth-heading">
+            <div class="field-row">
+              <div><label for="register-name">Nama penuh</label><input id="register-name" name="name" type="text" autocomplete="name" minlength="2" maxlength="100" required></div>
+              <div><label for="register-phone">Nombor telefon</label><input id="register-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" minlength="7" maxlength="24" placeholder="+673 ..." required></div>
+            </div>
+            <label for="register-email">E-mel edu.bn</label>
+            <input id="register-email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="nama@edu.bn" required>
+            <label for="register-password">Kata laluan</label>
+            <div class="password-field">
+              <input id="register-password" name="password" type="password" autocomplete="new-password" minlength="8" aria-describedby="password-help" required>
+              <button type="button" data-password-toggle="register-password" aria-label="Tunjukkan kata laluan">Lihat</button>
+            </div>
+            <p class="field-help" id="password-help">Sekurang-kurangnya 8 aksara.</p>
+            <label for="register-confirm">Sahkan kata laluan</label>
+            <div class="password-field">
+              <input id="register-confirm" name="confirm" type="password" autocomplete="new-password" minlength="8" required>
+              <button type="button" data-password-toggle="register-confirm" aria-label="Tunjukkan kata laluan">Lihat</button>
+            </div>
+            <button class="auth-submit" type="submit">Daftar dan sahkan e-mel</button>
+          </form>
+        </div>
+
+        <div id="verify-view" class="verify-view" hidden>
+          <div class="verify-icon" aria-hidden="true">✉</div>
+          <p class="auth-kicker">SATU LANGKAH LAGI</p>
+          <h2>Sahkan e-mel biskita</h2>
+          <p>Kami sudah menghantar pautan pengesahan ke <strong id="verify-email"></strong>. Buka e-mel atu, tekan pautan, kemudian kembali ke sini.</p>
+          <button class="auth-submit" id="check-verification" type="button">Saya sudah sahkan</button>
+          <button class="auth-secondary" id="resend-verification" type="button">Hantar semula e-mel</button>
+          <button class="auth-link-button" id="verify-signout" type="button">Guna akaun lain</button>
+        </div>
+
+        <p class="auth-status" id="auth-status" role="status" aria-live="polite" hidden></p>
+        <p class="admin-entry">Pentadbir kandungan? <a href="/admin.html">Buka Ruang Admin</a></p>
+      </div>
+      <p class="auth-privacy">Maklumat akaun digunakan untuk mengesahkan akses warga pendidik.</p>
+    </section>
+  </main>
+</body>
+</html>

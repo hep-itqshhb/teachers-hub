@@ -90,6 +90,7 @@
   "auth": {
     "authorizedDomains": ["teachershub-itq.web.app", "localhost"],
     "providers": {
+      "emailPassword": true,
       "googleSignIn": {
         "oAuthBrandDisplayName": "Teacher's Hub ITQSHHB",
         "supportEmail": "azharsuhaili19@gmail.com"

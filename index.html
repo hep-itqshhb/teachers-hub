@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ms-BN">
+<html lang="ms-BN" class="auth-pending">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,6 +18,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='14' fill='%23123f34'/%3E%3Cpath d='M24 9 39 24 24 39 9 24Z' fill='none' stroke='%23d8b85a' stroke-width='2'/%3E%3Cpath d='M24 16 32 24 24 32 16 24Z' fill='none' stroke='%23fffdf8' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css?v=11">
   <link rel="stylesheet" href="upgrade.css?v=2">
+  <script src="assets/auth-guard.js?v=1" defer></script>
   <script src="config.js?v=2" defer></script>
   <script src="app.js?v=6" defer></script>
   <script src="assets/public-content.js?v=1" defer></script>
@@ -37,6 +38,7 @@
         <a href="#services">Akses Pantas</a>
         <a href="#announcements">Makluman</a>
         <a href="#footer">Maklumat</a>
+        <span class="member-menu"><span id="member-name"></span><button id="member-signout" type="button">Keluar</button></span>
         <button class="install-button" id="install-app" type="button" hidden>Pasang</button>
       </nav>
     </div>

@@ -5,6 +5,7 @@ const contentRef = doc(db, "siteContent", "current");
 
 window.hubContentStore = {
   async load() {
+    if (window.authGateReady && !(await window.authGateReady)) return null;
     const snapshot = await getDoc(contentRef);
     if (!snapshot.exists()) return null;
     const content = snapshot.data();

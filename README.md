@@ -1,5 +1,9 @@
 # Teacher's Hub ITQSHHB
 
+## Akses warga pendidik
+
+Laman utama memerlukan akaun e-mel `@edu.bn` yang sudah disahkan. Pengguna mendaftar di [halaman akaun](https://teachershub-itq.web.app/auth.html) dengan nama, nombor telefon, e-mel rasmi dan kata laluan. Firebase menghantar pautan pengesahan sebelum akses penuh dibuka.
+
 Portal warga pendidik ITQSHHB di [teachershub-itq.web.app](https://teachershub-itq.web.app/). Pautan laporan pelajar membuka sistem borang sedia ada. Portal ini tidak menyimpan laporan atau data pelajar.
 
 ## Urus kandungan

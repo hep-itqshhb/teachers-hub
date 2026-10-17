@@ -1,13 +1,36 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // siteContent/current contains only public dates and announcements.
-    // No student records, private files or user profiles are stored here.
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // siteContent/current
+    //   importantDates: list (required, max 30)
+    //   announcements: list (required, max 40)
+    //   updatedAt: timestamp (required)
+    // profiles/{uid}
+    //   uid: string (required, immutable, document owner)
+    //   displayName: string (required, 2-100 chars)
+    //   phone: string (required, 7-24 chars)
+    //   email: string (required, immutable, authenticated @edu.bn email)
+    //   createdAt: timestamp (required, immutable)
+    //   updatedAt: timestamp (required)
+
     function isAdmin() {
       return request.auth != null
         && request.auth.token.email_verified == true
         && request.auth.token.email == 'azharsuhaili19@gmail.com'
         && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+
+    function isEduEmail(email) {
+      return email is string && email.matches('^[A-Za-z0-9._%+\\-]+@edu\\.bn$');
+    }
+
+    function isVerifiedEducator() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && isEduEmail(request.auth.token.email);
     }
 
     function validContent(data) {
@@ -20,10 +43,48 @@ service cloud.firestore {
         && data.updatedAt is timestamp;
     }
 
+    function validProfile(data, uid) {
+      return data.keys().hasAll(['uid', 'displayName', 'phone', 'email', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'phone', 'email', 'createdAt', 'updatedAt'])
+        && data.uid is string
+        && data.uid == uid
+        && data.uid == request.auth.uid
+        && data.displayName is string
+        && data.displayName.size() >= 2
+        && data.displayName.size() <= 100
+        && data.phone is string
+        && data.phone.size() >= 7
+        && data.phone.size() <= 24
+        && data.email is string
+        && data.email == request.auth.token.email
+        && isEduEmail(data.email)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
     match /siteContent/current {
-      allow get: if true;
+      allow get: if isVerifiedEducator() || isAdmin();
       allow list: if false;
       allow create, update: if isAdmin() && validContent(request.resource.data);
+      allow delete: if false;
+    }
+
+    match /profiles/{uid} {
+      allow get: if isVerifiedEducator() && request.auth.uid == uid;
+      allow list: if false;
+      allow create: if request.auth != null
+        && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider == 'password'
+        && validProfile(request.resource.data, uid)
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if isVerifiedEducator()
+        && request.auth.uid == uid
+        && validProfile(request.resource.data, uid)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.updatedAt == request.time;
       allow delete: if false;
     }
 

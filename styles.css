@@ -17,6 +17,7 @@
   text-rendering: optimizeLegibility;
 }
 * { box-sizing: border-box; }
+.auth-pending body { visibility: hidden; }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 body { margin: 0; min-width: 320px; background: var(--surface); color: var(--ink); }
 a { color: inherit; }
@@ -31,6 +32,10 @@ a { color: inherit; }
 .brand-copy strong { color: #fff; text-shadow: 0 1px 8px rgb(0 0 0 / 24%); font-family: Georgia, "Times New Roman", serif; font-size: 19px; font-weight: 600; letter-spacing: -.03em; }
 .brand-copy span { color: rgb(255 255 255 / 84%); font-size: 11px; letter-spacing: .14em; }
 .top-nav { display: flex; align-items: center; gap: 34px; }
+.member-menu { display: inline-flex; align-items: center; gap: 9px; color: #fff; font-size: 12px; }
+.member-menu > span { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.member-menu button { min-height: 36px; padding: 0 12px; border: 1px solid rgb(255 255 255 / 55%); border-radius: 999px; background: rgb(18 63 52 / 34%); color: #fff; font: inherit; font-weight: 700; cursor: pointer; }
+.member-menu button:hover { background: var(--primary-deep); }
 .top-nav a { display: inline-flex; min-height: 44px; align-items: center; color: #fff; text-shadow: 0 1px 8px rgb(0 0 0 / 30%); text-decoration: none; font-size: 14px; transition: color .18s ease; }
 .top-nav a:hover { color: var(--tower); }
 .top-nav a:focus-visible, .brand:focus-visible, a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
@@ -97,6 +102,8 @@ h2 { margin: 0; color: var(--primary-deep); font-family: Georgia, "Times New Rom
   .brand-logo { width: 42px; height: 42px; }
   .brand-copy strong { font-size: 17px; }
   .top-nav { gap: 15px; }
+  .top-nav > a { display: none; }
+  .member-menu > span { max-width: 105px; }
   .top-nav a { font-size: 13px; }
   .hero-media { height: auto; min-height: 0; max-height: none; aspect-ratio: 4 / 3; }
   .hero-media img { object-position: center top; }

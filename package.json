@@ -3,7 +3,7 @@
   "private": true,
   "version": "2.0.0",
   "scripts": {
-    "build": "esbuild src/public-content.js src/admin.js --bundle --format=iife --outdir=assets --minify --target=es2020"
+    "build": "esbuild src/public-content.js src/admin.js src/auth.js src/auth-guard.js --bundle --format=iife --outdir=assets --minify --target=es2020"
   },
   "dependencies": {
     "firebase": "13.0.0"
