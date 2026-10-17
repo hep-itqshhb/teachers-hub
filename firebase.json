@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "teachers-hub-itqshhb-261017",
+    "target": "teachershub",
     "public": ".",
     "ignore": [
       "firebase.json",
