@@ -8,6 +8,12 @@ service cloud.firestore {
     //   importantDates: list (required, max 30)
     //   announcements: list (required, max 40)
     //   updatedAt: timestamp (required)
+    // quickLinks/current
+    //   links: map of six service settings (HTTPS URL, status, note)
+    //   updatedAt: timestamp (required)
+    // linkStats/{serviceId}
+    //   clicks: integer aggregate (no user identity stored)
+    //   updatedAt: timestamp (required)
     // profiles/{uid}
     //   uid: string (required, immutable, document owner)
     //   displayName: string (required, 2-100 chars)
@@ -31,6 +37,44 @@ service cloud.firestore {
       return request.auth != null
         && request.auth.token.email_verified == true
         && isEduEmail(request.auth.token.email);
+    }
+
+    function isServiceId(serviceId) {
+      return serviceId in ['disiplin', 'hafazan', 'akademik', 'aktiviti', 'kalendar', 'bpp'];
+    }
+
+    function validQuickLink(item) {
+      return item is map
+        && item.keys().hasAll(['url', 'status', 'note'])
+        && item.keys().hasOnly(['url', 'status', 'note'])
+        && item.url is string
+        && item.url.size() <= 500
+        && (item.url == '' || item.url.matches('^https://.+$'))
+        && item.status in ['active', 'maintenance', 'closed']
+        && item.note is string
+        && item.note.size() <= 120;
+    }
+
+    function validQuickLinks(data) {
+      return data.keys().hasAll(['links', 'updatedAt'])
+        && data.keys().hasOnly(['links', 'updatedAt'])
+        && data.links is map
+        && data.links.keys().hasAll(['disiplin', 'hafazan', 'akademik', 'aktiviti', 'kalendar', 'bpp'])
+        && data.links.keys().hasOnly(['disiplin', 'hafazan', 'akademik', 'aktiviti', 'kalendar', 'bpp'])
+        && validQuickLink(data.links.disiplin)
+        && validQuickLink(data.links.hafazan)
+        && validQuickLink(data.links.akademik)
+        && validQuickLink(data.links.aktiviti)
+        && validQuickLink(data.links.kalendar)
+        && validQuickLink(data.links.bpp)
+        && data.updatedAt == request.time;
+    }
+
+    function validClickStats(data) {
+      return data.keys().hasAll(['clicks', 'updatedAt'])
+        && data.keys().hasOnly(['clicks', 'updatedAt'])
+        && data.clicks is int
+        && data.updatedAt == request.time;
     }
 
     function validContent(data) {
@@ -67,6 +111,26 @@ service cloud.firestore {
       allow list: if false;
       allow create, update: if isAdmin() && validContent(request.resource.data);
       allow delete: if false;
+    }
+
+    match /quickLinks/current {
+      allow get: if isVerifiedEducator() || isAdmin();
+      allow list, delete: if false;
+      allow create, update: if isAdmin() && validQuickLinks(request.resource.data);
+    }
+
+    match /linkStats/{serviceId} {
+      allow get: if isAdmin() && isServiceId(serviceId);
+      allow list, delete: if false;
+      allow create: if isServiceId(serviceId)
+        && (isVerifiedEducator() || isAdmin())
+        && validClickStats(request.resource.data)
+        && request.resource.data.clicks == 1;
+      allow update: if isServiceId(serviceId)
+        && (isVerifiedEducator() || isAdmin())
+        && validClickStats(request.resource.data)
+        && resource.data.clicks is int
+        && request.resource.data.clicks == resource.data.clicks + 1;
     }
 
     match /profiles/{uid} {

@@ -8,15 +8,17 @@ Portal warga pendidik ITQSHHB di [teachershub-itq.web.app](https://teachershub-i
 
 ## Urus kandungan
 
-Buka [ruang Admin](https://teachershub-itq.web.app/admin.html), log masuk dengan akaun Google `azharsuhaili19@gmail.com`, dan urus **Tarikh penting** atau **Makluman warga pendidik**. Tekan **Simpan perubahan** untuk menerbitkan kandungan tanpa mengubah kod atau membuat deploy. Muat semula laman utama untuk melihat perubahan.
+Buka [ruang Admin](https://teachershub-itq.web.app/admin.html) dan log masuk dengan akaun Google `azharsuhaili19@gmail.com`. Dashboard memaparkan jumlah klik setiap pautan Akses Pantas, pautan teratas, jumlah pautan aktif dan kandungan aktif. Statistik klik bermula selepas ciri ini diterbitkan; angka ialah klik, bukan pengguna unik.
 
-Entri boleh ditambah, diubah, dinyahaktifkan atau dibuang. Tarikh penting yang berlalu disembunyikan pada laman utama. Makluman boleh diberi tarikh tamat dan pautan HTTPS. Semua kandungan dalam editor ialah kandungan awam; jangan masukkan nama pelajar atau maklumat sulit.
+Di bahagian **Urus Akses Pantas**, ubah URL HTTPS, status dan nota bagi enam pautan, kemudian tekan **Simpan pautan**. Urus **Tarikh penting** dan **Makluman warga pendidik** dalam bahagian masing-masing, kemudian tekan **Simpan perubahan**. Muat semula laman utama untuk melihat perubahan.
 
-Kandungan disimpan di Cloud Firestore, database `teachers-hub-content` (Singapore). Dokumen `siteContent/current` boleh dibaca umum. Firestore Security Rules hanya membenarkan akaun Google admin yang telah disahkan mengubahnya. Sebelum simpanan pertama atau apabila Firestore tidak tersedia, laman utama menggunakan kandungan sandaran dalam `config.js`.
+Entri boleh ditambah, diubah, dinyahaktifkan atau dibuang. Tarikh penting yang berlalu disembunyikan pada laman utama. Makluman boleh diberi tarikh tamat dan pautan HTTPS. Jangan masukkan nama pelajar atau maklumat sulit dalam kandungan portal.
+
+Kandungan disimpan di Cloud Firestore, database `teachers-hub-content` (Singapore). Dokumen `siteContent/current` dan `quickLinks/current` boleh dibaca oleh guru yang telah mengesahkan e-mel ITQSHHB; hanya akaun Google admin yang telah disahkan boleh mengubahnya. Statistik agregat disimpan dalam `linkStats/{serviceId}` dan hanya admin boleh membacanya. Tiada identiti pengguna disimpan bersama klik. Sebelum simpanan pertama atau apabila Firestore tidak tersedia, laman utama menggunakan kandungan dan pautan sandaran dalam `config.js`.
 
 ## Konfigurasi pautan
 
-Pautan borang disiplin, hafazan, akademik dan aktiviti, kalendar, serta laman BPP masih dikonfigurasi dalam `config.js`. Bahagian ini belum berada dalam editor admin. Pautan kosong dipaparkan sebagai **Pautan Belum Tersedia**.
+Pautan borang disiplin, hafazan, akademik dan aktiviti, kalendar, serta laman BPP boleh diubah dalam Ruang Admin. Nilai dalam `config.js` menjadi sandaran apabila tetapan Firestore belum ada atau tidak dapat dimuatkan. Pautan kosong dipaparkan sebagai **Pautan Belum Tersedia**.
 
 Soalan lazim dikendalikan oleh `faq.js`. Pilihan status perkhidmatan juga dalam `config.js`.
 

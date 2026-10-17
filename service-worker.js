@@ -1,17 +1,17 @@
-const CACHE_NAME = "teachers-hub-v12";
+const CACHE_NAME = "teachers-hub-v13";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/admin.html",
   "/auth.html",
   "/auth.css?v=1",
-  "/admin.css?v=1",
+  "/admin.css?v=2",
   "/styles.css?v=11",
   "/upgrade.css?v=2",
   "/config.js?v=2",
-  "/app.js?v=6",
-  "/assets/public-content.js?v=1",
-  "/assets/admin.js?v=2",
+  "/app.js?v=7",
+  "/assets/public-content.js?v=2",
+  "/assets/admin.js?v=3",
   "/assets/auth.js?v=3",
   "/assets/auth-guard.js?v=2",
   "/upgrade.js?v=2",
