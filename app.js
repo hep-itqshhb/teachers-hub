@@ -26,7 +26,14 @@
   document.querySelectorAll("[data-service]").forEach((card) => {
     const service = card.dataset.service;
     const slot = card.querySelector("[data-action]");
-    const url = safeExternalUrl(HUB_CONFIG?.links?.[service]);
+    const serviceState = HUB_CONFIG?.serviceStatus?.[service] || { status: "active", note: "" };
+    const status = document.createElement("div");
+    status.className = `service-meta service-meta--${serviceState.status}`;
+    const statusLabel = serviceState.status === "maintenance" ? "Penyelenggaraan" : serviceState.status === "closed" ? "Ditutup" : "Aktif";
+    status.innerHTML = `<span class="service-status"><span aria-hidden="true"></span>${statusLabel}</span>${serviceState.note ? `<span class="service-note">${serviceState.note}</span>` : ""}`;
+    card.insertBefore(status, slot);
+
+    const url = serviceState.status === "active" ? safeExternalUrl(HUB_CONFIG?.links?.[service]) : null;
     if (url) {
       const link = document.createElement("a");
       link.className = "card-link";
@@ -41,8 +48,9 @@
 
     const state = document.createElement("span");
     state.className = "unavailable";
-    state.setAttribute("aria-label", "Pautan belum tersedia");
-    state.innerHTML = `${actionIcons.unavailable}<span>Pautan Belum Tersedia</span>`;
+    const unavailableLabel = serviceState.status === "maintenance" ? "Pautan sedang diselenggara" : serviceState.status === "closed" ? "Pautan ditutup" : "Pautan belum tersedia";
+    state.setAttribute("aria-label", unavailableLabel);
+    state.innerHTML = `${actionIcons.unavailable}<span>${unavailableLabel}</span>`;
     slot.append(state);
   });
 
@@ -54,3 +62,4 @@
   document.getElementById("current-year").textContent = new Date().getFullYear();
   document.title = `${HUB_CONFIG.siteName.replace(/^ITQSHHB\s+/, "")} | ITQSHHB`;
 })();
+
