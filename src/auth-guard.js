@@ -2,7 +2,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { ADMIN_EMAIL, app } from "./firebase-client.js";
 
 const auth = getAuth(app);
-const isEduEmail = (email) => /^[A-Z0-9._%+-]+@edu\.bn$/i.test(email || "");
+const isEduEmail = (email) => /^[A-Z0-9._%+-]+@itqshhb\.edu\.bn$/i.test(email || "");
 
 window.authGateReady = auth.authStateReady().then(() => {
   const user = auth.currentUser;

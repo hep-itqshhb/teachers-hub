@@ -12,7 +12,7 @@ service cloud.firestore {
     //   uid: string (required, immutable, document owner)
     //   displayName: string (required, 2-100 chars)
     //   phone: string (required, 7-24 chars)
-    //   email: string (required, immutable, authenticated @edu.bn email)
+    //   email: string (required, immutable, authenticated @itqshhb.edu.bn email)
     //   createdAt: timestamp (required, immutable)
     //   updatedAt: timestamp (required)
 
@@ -24,7 +24,7 @@ service cloud.firestore {
     }
 
     function isEduEmail(email) {
-      return email is string && email.matches('^[A-Za-z0-9._%+\\-]+@edu\\.bn$');
+      return email is string && email.matches('^[A-Za-z0-9._%+\\-]+@itqshhb\\.edu\\.bn$');
     }
 
     function isVerifiedEducator() {

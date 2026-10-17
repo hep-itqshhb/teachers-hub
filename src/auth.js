@@ -23,7 +23,7 @@ const status = byId("auth-status");
 let verificationSentAt = 0;
 
 function isEduEmail(email) {
-  return /^[A-Z0-9._%+-]+@edu\.bn$/i.test(email.trim());
+  return /^[A-Z0-9._%+-]+@itqshhb\.edu\.bn$/i.test(email.trim());
 }
 
 function isAllowedUser(user) {
@@ -58,7 +58,7 @@ function showForm(mode) {
   byId("register-tab").setAttribute("aria-selected", String(registering));
   byId("auth-heading").textContent = registering ? "Daftar akaun" : "Log masuk";
   byId("auth-intro").textContent = registering
-    ? "Daftar menggunakan e-mel rasmi edu.bn biskita."
+    ? "Daftar menggunakan e-mel rasmi @itqshhb.edu.bn biskita."
     : "Gunakan akaun Teacher's Hub biskita untuk meneruskan.";
   setStatus("");
 }
@@ -100,7 +100,7 @@ loginForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const email = loginForm.elements.namedItem("email").value.trim().toLowerCase();
   if (!isEduEmail(email)) {
-    setStatus("Gunakan alamat e-mel rasmi yang berakhir dengan @edu.bn.", "error");
+    setStatus("Gunakan alamat e-mel rasmi yang berakhir dengan @itqshhb.edu.bn.", "error");
     return;
   }
   const submit = loginForm.querySelector('[type="submit"]');
@@ -124,7 +124,7 @@ registerForm.addEventListener("submit", async (event) => {
   const email = registerForm.elements.namedItem("email").value.trim().toLowerCase();
   const password = registerForm.elements.namedItem("password").value;
   if (!isEduEmail(email)) {
-    setStatus("Pendaftaran hanya dibenarkan menggunakan e-mel @edu.bn.", "error");
+    setStatus("Pendaftaran hanya dibenarkan menggunakan e-mel @itqshhb.edu.bn.", "error");
     return;
   }
   if (password !== registerForm.elements.namedItem("confirm").value) {
@@ -157,7 +157,7 @@ registerForm.addEventListener("submit", async (event) => {
 byId("forgot-password").addEventListener("click", async () => {
   const email = loginForm.elements.namedItem("email").value.trim().toLowerCase();
   if (!isEduEmail(email)) {
-    setStatus("Masukkan e-mel @edu.bn biskita dahulu.", "error");
+    setStatus("Masukkan e-mel @itqshhb.edu.bn biskita dahulu.", "error");
     byId("login-email").focus();
     return;
   }
