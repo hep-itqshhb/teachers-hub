@@ -107,11 +107,12 @@ function renderLinks(savedLinks = {}) {
 }
 
 function collectLinks() {
-  return Object.fromEntries([...linksList.children].map((row) => [row.dataset.service, {
-    url: httpsLink(row.querySelector('[name="url"]').value.trim()),
-    status: row.querySelector('[name="status"]').value,
-    note: row.querySelector('[name="note"]').value.trim()
-  }]));
+  return Object.fromEntries([...linksList.children].map((row) => {
+    const url = httpsLink(row.querySelector('[name="url"]').value.trim());
+    const status = row.querySelector('[name="status"]').value;
+    if (status === "active" && !url) throw new Error(`${row.querySelector("h3").textContent}: isi URL atau tukar status kepada Ditutup.`);
+    return [row.dataset.service, { url, status, note: row.querySelector('[name="note"]').value.trim() }];
+  }));
 }
 
 function activeContentCount() {

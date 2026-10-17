@@ -51,6 +51,7 @@ service cloud.firestore {
         && item.url.size() <= 500
         && (item.url == '' || item.url.matches('^https://.+$'))
         && item.status in ['active', 'maintenance', 'closed']
+        && (item.status != 'active' || item.url != '')
         && item.note is string
         && item.note.size() <= 120;
     }
