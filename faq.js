@@ -7,6 +7,10 @@
   const categoryButtons = [...document.querySelectorAll("[data-faq-category]")];
   const openAll = document.getElementById("faq-open-all");
   const closeAll = document.getElementById("faq-close-all");
+  const dialog = document.getElementById("faq-dialog");
+  const openDialogButton = document.getElementById("faq-open-dialog");
+  const closeDialogButton = document.getElementById("faq-close-dialog");
+  const featured = document.getElementById("faq-featured");
   let activeCategory = "Semua";
 
   function setExpanded(item, expanded) {
@@ -34,6 +38,35 @@
     count.textContent = "Memaparkan " + shown + " daripada " + entries.length + " soalan";
     empty.hidden = shown !== 0;
     openAll.disabled = closeAll.disabled = shown === 0;
+  }
+
+  function selectCategory(category) {
+    activeCategory = category;
+    categoryButtons.forEach((chip) => {
+      const active = chip.dataset.faqCategory === category;
+      chip.classList.toggle("is-active", active);
+      chip.setAttribute("aria-pressed", String(active));
+    });
+  }
+
+  function openDialog(index) {
+    if (typeof index === "number") {
+      selectCategory("Semua");
+      search.value = entries[index].question;
+    } else {
+      selectCategory("Semua");
+      search.value = "";
+    }
+    render();
+    dialog.showModal();
+    document.body.classList.add("faq-dialog-open");
+    if (typeof index === "number") {
+      const item = list.querySelector(`[data-index="${index}"]`);
+      if (item) {
+        setExpanded(item, true);
+        item.querySelector(".faq-question").focus();
+      }
+    } else search.focus();
   }
 
   entries.forEach((entry, index) => {
@@ -83,17 +116,33 @@
     list.append(item);
   });
 
+  [5, 4, 19].forEach((index) => {
+    const entry = entries[index];
+    const button = document.createElement("button");
+    button.className = "faq-featured-button";
+    button.type = "button";
+    button.innerHTML = `<span>${entry.category}</span><strong></strong><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 6 6-6 6"/></svg>`;
+    button.querySelector("strong").textContent = entry.question;
+    button.addEventListener("click", () => openDialog(index));
+    featured.append(button);
+  });
+
   categoryButtons.forEach((button) => button.addEventListener("click", () => {
-    activeCategory = button.dataset.faqCategory;
-    categoryButtons.forEach((chip) => {
-      const active = chip === button;
-      chip.classList.toggle("is-active", active);
-      chip.setAttribute("aria-pressed", String(active));
-    });
+    selectCategory(button.dataset.faqCategory);
     render();
   }));
   search.addEventListener("input", render);
   openAll.addEventListener("click", () => list.querySelectorAll(".faq-item:not([hidden])").forEach((item) => setExpanded(item, true)));
   closeAll.addEventListener("click", () => list.querySelectorAll(".faq-item:not([hidden])").forEach((item) => setExpanded(item, false)));
+  openDialogButton.addEventListener("click", () => openDialog());
+  closeDialogButton.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  dialog.addEventListener("close", () => {
+    document.body.classList.remove("faq-dialog-open");
+    openDialogButton.focus();
+  });
   render();
 })();
+

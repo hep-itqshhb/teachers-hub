@@ -21,7 +21,7 @@
   <script src="config.js" defer></script>
   <script src="app.js?v=6" defer></script>
   <script src="upgrade.js?v=1" defer></script>
-  <script src="faq.js?v=2" defer></script>
+  <script src="faq.js?v=3" defer></script>
    
 <style>.visitor-counter-wrap{display:flex;justify-content:flex-end;align-items:center}.visitor-counter-link{min-height:44px;display:inline-flex;align-items:center;border-radius:10px}.visitor-counter-link img{display:block;width:210px;max-width:100%;height:auto}@media(max-width:780px){.visitor-counter-wrap{justify-content:flex-start}}</style></head>
 <body>
@@ -135,47 +135,66 @@
 
     <section class="faq-section" id="faq" aria-labelledby="faq-title">
       <div class="faq-container">
-        <header class="faq-heading">
-          <p class="section-kicker">PANDUAN PENGGUNA</p>
-          <h2 id="faq-title">Soalan Lazim</h2>
-          <p class="faq-subtitle">Panduan ringkas untuk membantu warga pendidik memahami perkhidmatan, tatacara pelaporan dan tindakan susulan melalui Teacher's Hub.</p>
-        </header>
-        <div class="faq-search-wrap">
-          <svg class="faq-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.2 4.2"></path></svg>
-          <input class="faq-search" id="faq-search" type="search" placeholder="Cari soalan atau jawapan..." aria-label="Cari soalan atau jawapan" autocomplete="off">
+        <div class="faq-compact-card">
+          <header class="faq-compact-heading">
+            <div>
+              <p class="section-kicker">PANDUAN PENGGUNA</p>
+              <h2 id="faq-title">Perlukan bantuan?</h2>
+              <p class="faq-subtitle">Lihat jawapan ringkas atau buka Pusat Bantuan untuk mencari semua soalan.</p>
+            </div>
+            <button class="faq-primary-button" id="faq-open-dialog" type="button" aria-haspopup="dialog">Buka Pusat Bantuan</button>
+          </header>
+          <div class="faq-featured" id="faq-featured" aria-label="Soalan utama"></div>
         </div>
-        <div class="faq-categories" role="group" aria-label="Tapis soalan mengikut kategori">
-          <button class="faq-chip is-active" type="button" data-faq-category="Semua" aria-pressed="true">Semua</button>
-          <button class="faq-chip" type="button" data-faq-category="Umum" aria-pressed="false">Umum</button>
-          <button class="faq-chip" type="button" data-faq-category="Disiplin" aria-pressed="false">Disiplin</button>
-          <button class="faq-chip" type="button" data-faq-category="Hafazan" aria-pressed="false">Hafazan</button>
-          <button class="faq-chip" type="button" data-faq-category="Akademik" aria-pressed="false">Akademik</button>
-          <button class="faq-chip" type="button" data-faq-category="Aktiviti" aria-pressed="false">Aktiviti</button>
-          <button class="faq-chip" type="button" data-faq-category="Bantuan" aria-pressed="false">Bantuan</button>
-        </div>
-        <div class="faq-toolbar">
-          <p class="faq-count" id="faq-count" aria-live="polite"></p>
-          <div class="faq-bulk-actions">
-            <button class="faq-text-button" id="faq-open-all" type="button">Buka Semua</button>
-            <span aria-hidden="true"></span>
-            <button class="faq-text-button" id="faq-close-all" type="button">Tutup Semua</button>
-          </div>
-        </div>
-        <div class="faq-list" id="faq-list" aria-label="Senarai soalan lazim"></div>
-        <p class="faq-empty" id="faq-empty" hidden>Tiada soalan yang sepadan.</p>
-        <details class="faq-process">
-          <summary>Bagaimana Laporan Pelajar Diproses?</summary>
-          <div class="faq-process-content">
-            <ol class="faq-steps">
-              <li><span class="faq-step-number" aria-hidden="true">01</span><div><h3>Langkah 1 — Laporan Guru</h3><p>Guru mengemukakan laporan melalui borang yang disediakan.</p></div></li>
-              <li><span class="faq-step-number" aria-hidden="true">02</span><div><h3>Langkah 2 — Semakan dan Pengesahan</h3><p>Unit atau pegawai bertanggungjawab meneliti laporan dan mendapatkan maklumat lanjut jika diperlukan.</p></div></li>
-              <li><span class="faq-step-number" aria-hidden="true">03</span><div><h3>Langkah 3 — Pertimbangan dan Tindakan</h3><p>Laporan dihadapkan kepada Timbalan Pengetua Hal Ehwal Pelajar untuk pertimbangan tindakan yang bersesuaian mengikut bidang kuasa.</p></div></li>
-              <li><span class="faq-step-number" aria-hidden="true">04</span><div><h3>Langkah 4 — Pemantauan Susulan</h3><p>Pelaksanaan tindakan, bimbingan atau pemulihan pelajar dipantau mengikut keperluan.</p></div></li>
-            </ol>
-            <p class="faq-process-note">Penghantaran laporan ialah langkah awal untuk semakan; tindakan susulan bergantung pada penelitian dan pertimbangan pihak yang diberi kuasa.</p>
-          </div>
-        </details>
       </div>
+
+      <dialog class="faq-dialog" id="faq-dialog" aria-labelledby="faq-dialog-title">
+        <div class="faq-dialog-panel">
+          <header class="faq-dialog-heading">
+            <div>
+              <p class="section-kicker">PUSAT BANTUAN</p>
+              <h2 id="faq-dialog-title">Soalan Lazim</h2>
+              <p>Cari jawapan mengikut kata kunci atau kategori.</p>
+            </div>
+            <button class="faq-close-button" id="faq-close-dialog" type="button" aria-label="Tutup Pusat Bantuan">×</button>
+          </header>
+          <div class="faq-search-wrap">
+            <svg class="faq-search-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.2 4.2"></path></svg>
+            <input class="faq-search" id="faq-search" type="search" placeholder="Cari soalan atau jawapan..." aria-label="Cari soalan atau jawapan" autocomplete="off">
+          </div>
+          <div class="faq-categories" role="group" aria-label="Tapis soalan mengikut kategori">
+            <button class="faq-chip is-active" type="button" data-faq-category="Semua" aria-pressed="true">Semua</button>
+            <button class="faq-chip" type="button" data-faq-category="Umum" aria-pressed="false">Umum</button>
+            <button class="faq-chip" type="button" data-faq-category="Disiplin" aria-pressed="false">Disiplin</button>
+            <button class="faq-chip" type="button" data-faq-category="Hafazan" aria-pressed="false">Hafazan</button>
+            <button class="faq-chip" type="button" data-faq-category="Akademik" aria-pressed="false">Akademik</button>
+            <button class="faq-chip" type="button" data-faq-category="Aktiviti" aria-pressed="false">Aktiviti</button>
+            <button class="faq-chip" type="button" data-faq-category="Bantuan" aria-pressed="false">Bantuan</button>
+          </div>
+          <div class="faq-toolbar">
+            <p class="faq-count" id="faq-count" aria-live="polite"></p>
+            <div class="faq-bulk-actions">
+              <button class="faq-text-button" id="faq-open-all" type="button">Buka Semua</button>
+              <span aria-hidden="true"></span>
+              <button class="faq-text-button" id="faq-close-all" type="button">Tutup Semua</button>
+            </div>
+          </div>
+          <div class="faq-list" id="faq-list" aria-label="Senarai soalan lazim"></div>
+          <p class="faq-empty" id="faq-empty" hidden>Tiada soalan yang sepadan.</p>
+          <details class="faq-process">
+            <summary>Bagaimana Laporan Pelajar Diproses?</summary>
+            <div class="faq-process-content">
+              <ol class="faq-steps">
+                <li><span class="faq-step-number" aria-hidden="true">01</span><div><h3>Langkah 1 — Laporan Guru</h3><p>Guru mengemukakan laporan melalui borang yang disediakan.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">02</span><div><h3>Langkah 2 — Semakan dan Pengesahan</h3><p>Unit atau pegawai bertanggungjawab meneliti laporan dan mendapatkan maklumat lanjut jika diperlukan.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">03</span><div><h3>Langkah 3 — Pertimbangan dan Tindakan</h3><p>Laporan dihadapkan kepada Timbalan Pengetua Hal Ehwal Pelajar untuk pertimbangan tindakan yang bersesuaian mengikut bidang kuasa.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">04</span><div><h3>Langkah 4 — Pemantauan Susulan</h3><p>Pelaksanaan tindakan, bimbingan atau pemulihan pelajar dipantau mengikut keperluan.</p></div></li>
+              </ol>
+              <p class="faq-process-note">Penghantaran laporan ialah langkah awal untuk semakan; tindakan susulan bergantung pada penelitian dan pertimbangan pihak yang diberi kuasa.</p>
+            </div>
+          </details>
+        </div>
+      </dialog>
     </section>
 
     
