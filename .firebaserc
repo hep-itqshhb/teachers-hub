@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "teachers-hub-itqshhb-261017"
+  },
+  "targets": {
+    "teachers-hub-itqshhb-261017": {
+      "hosting": {
+        "teachershub": [
+          "teachershub-itq"
+        ]
+      }
+    }
   }
 }
