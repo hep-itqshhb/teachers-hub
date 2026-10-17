@@ -1,0 +1,26 @@
+name: Check Firebase backend access
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/firebase-backend-bootstrap.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TEACHERS_HUB_ITQSHHB_261017 }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Inspect Firebase access
+        run: |
+          gcloud services list --enabled --project teachers-hub-itqshhb-261017 --format='value(config.name)' | grep '^firestore.googleapis.com$' || true
+          npx -y firebase-tools@latest apps:list --project teachers-hub-itqshhb-261017
