@@ -1,4 +1,4 @@
-const CACHE_NAME = "teachers-hub-v6";
+const CACHE_NAME = "teachers-hub-v7";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -31,6 +31,8 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   if (event.request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
+  // Firebase Authentication serves its redirect helper under this reserved path.
+  if (requestUrl.pathname.startsWith("/__/")) return;
   if (event.request.mode === "navigate") {
     event.respondWith(fetch(event.request, { cache: "no-store" }).then((response) => {
       if (response.ok) {
