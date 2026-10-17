@@ -41,7 +41,10 @@ function friendlyError(error) {
     "auth/email-already-in-use": "E-mel ini sudah mempunyai akaun. Cuba log masuk.",
     "auth/invalid-credential": "E-mel atau kata laluan tidak tepat.",
     "auth/invalid-email": "Alamat e-mel tidak sah.",
+    "auth/network-request-failed": "Sambungan internet terputus. Sila cuba lagi.",
     "auth/too-many-requests": "Terlalu banyak percubaan. Cuba lagi kemudian.",
+    "auth/quota-exceeded": "Had penghantaran e-mel Firebase sudah dicapai. Sila cuba lagi kemudian.",
+    "auth/unauthorized-continue-uri": "Pautan pengesahan belum dibenarkan dalam tetapan Firebase. Hubungi admin.",
     "auth/weak-password": "Kata laluan belum cukup kuat.",
     "auth/user-disabled": "Akaun ini telah dinyahaktifkan."
   };
@@ -80,7 +83,7 @@ async function sendVerification(user, isResend = false) {
     handleCodeInApp: false
   });
   verificationSentAt = now;
-  setStatus(isResend ? "E-mel pengesahan sudah dihantar semula." : "E-mel pengesahan sudah dihantar.", "success");
+  setStatus("Permintaan penghantaran e-mel pengesahan berjaya. Semak Inbox dan Junk/Spam.", "success");
 }
 
 byId("login-tab").addEventListener("click", () => showForm("login"));
@@ -148,7 +151,9 @@ registerForm.addEventListener("submit", async (event) => {
     await sendVerification(credential.user);
     showVerification(credential.user);
   } catch (error) {
-    setStatus(friendlyError(error), "error");
+    setStatus(auth.currentUser?.email === email
+      ? `Akaun sudah dibuat, tetapi pendaftaran belum selesai: ${friendlyError(error)} Cuba tekan “Hantar semula e-mel”.`
+      : friendlyError(error), "error");
   } finally {
     submit.disabled = false;
   }
@@ -174,8 +179,9 @@ byId("resend-verification").addEventListener("click", async () => {
   button.disabled = true;
   try {
     if (auth.currentUser) await sendVerification(auth.currentUser, true);
+    else setStatus("Sesi sudah tamat. Log masuk semula untuk meminta e-mel pengesahan.", "error");
   } catch (error) {
-    setStatus(friendlyError(error), "error");
+    setStatus(`E-mel belum dapat dihantar: ${friendlyError(error)}`, "error");
   } finally {
     button.disabled = false;
   }
