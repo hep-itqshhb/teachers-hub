@@ -139,17 +139,32 @@ registerForm.addEventListener("submit", async (event) => {
   setStatus("Sedang menyediakan akaun…");
   try {
     const credential = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(credential.user, { displayName: name });
-    await setDoc(doc(db, "profiles", credential.user.uid), {
-      uid: credential.user.uid,
-      displayName: name,
-      phone,
-      email,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    });
-    await sendVerification(credential.user);
     showVerification(credential.user);
+    let verificationFailed = false;
+    try {
+      await sendVerification(credential.user);
+    } catch (error) {
+      verificationFailed = true;
+      setStatus(`E-mel belum dapat dihantar: ${friendlyError(error)} Cuba tekan “Hantar semula e-mel”.`, "error");
+    }
+
+    try {
+      await updateProfile(credential.user, { displayName: name });
+      await setDoc(doc(db, "profiles", credential.user.uid), {
+        uid: credential.user.uid,
+        displayName: name,
+        phone,
+        email,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+    } catch (error) {
+      // A profile write must never prevent the verification email from being sent.
+      console.error("Unable to save the teacher profile", error);
+      if (!verificationFailed) {
+        setStatus("Permintaan e-mel pengesahan berjaya, tetapi profil belum dapat disimpan. Sila hubungi pentadbir selepas mengesahkan e-mel.", "error");
+      }
+    }
   } catch (error) {
     setStatus(auth.currentUser?.email === email
       ? `Akaun sudah dibuat, tetapi pendaftaran belum selesai: ${friendlyError(error)} Cuba tekan “Hantar semula e-mel”.`
