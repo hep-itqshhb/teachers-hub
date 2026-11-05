@@ -1,5 +1,11 @@
 # Teacher's Hub ITQSHHB
 
+## Reka bentuk portal
+
+Sistem visual dalam `design.md`, `tokens.css` dan `base.css` mengekalkan warna serta keluarga font portal, akaun dan Admin. Halaman utama menggunakan pembuka yang ringkas, pautan pada seluruh kad perkhidmatan dan jadual mingguan yang mudah diimbas. Pusat Bantuan menyokong Escape dan pemulangan fokus; tab akaun menyokong kekunci anak panah, Home dan End.
+
+`hub-ui.js` menambah huruf **T** kecil pada keadaan loading dan butang `aria-busy`. Ia hanya memaparkan keadaan permintaan sedia ada, tanpa menangguhkan permintaan atau menambah penghantaran rangkaian. Tetapan reduced motion memaparkan T statik.
+
 ## Akses warga pendidik
 
 Laman utama memerlukan akaun e-mel `@itqshhb.edu.bn` yang sudah disahkan. Pengguna mendaftar di [halaman akaun](https://teachershub-itq.web.app/auth.html) dengan nama, nombor telefon, e-mel rasmi dan kata laluan. Firebase menghantar pautan pengesahan sebelum akses penuh dibuka.

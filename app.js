@@ -42,9 +42,7 @@
       status.className = `service-meta service-meta--${stateName}`;
       const badge = document.createElement("span");
       badge.className = "service-status";
-      const dot = document.createElement("span");
-      dot.setAttribute("aria-hidden", "true");
-      badge.append(dot, document.createTextNode(stateName === "maintenance" ? "Penyelenggaraan" : stateName === "closed" ? "Ditutup" : "Aktif"));
+      badge.textContent = stateName === "maintenance" ? "Penyelenggaraan" : stateName === "closed" ? "Ditutup" : "Aktif";
       status.append(badge);
       if (setting.note) {
         const note = document.createElement("span");
@@ -62,7 +60,8 @@
         link.target = "_blank";
         link.rel = "noopener noreferrer";
         link.setAttribute("aria-label", `${labels[service]} (dibuka pada tab baharu)`);
-        link.innerHTML = `Buka Pautan ${actionIcons.external}`;
+        const action = service === "kalendar" ? "Lihat kalendar" : service === "bpp" ? "Buka laman BPP" : "Buka borang";
+        link.innerHTML = `${action} ${actionIcons.external}`;
         link.addEventListener("click", () => recordClick(service));
         slot.append(link);
         return;
@@ -87,12 +86,7 @@
     }
   };
 
-  document.querySelectorAll("[data-action]").forEach((slot) => {
-    const loading = document.createElement("span");
-    loading.className = "unavailable";
-    loading.textContent = "Memuatkan pautan…";
-    slot.append(loading);
-  });
+  renderServices();
   footerBpp.addEventListener("click", () => recordClick("bpp"));
   document.addEventListener("DOMContentLoaded", async () => {
     try {

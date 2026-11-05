@@ -145,6 +145,11 @@
     document.body.classList.remove("faq-dialog-open");
     dialogTrigger.focus();
   });
+  dialog.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    event.preventDefault();
+    dialog.close();
+  });
   render();
 })();
 

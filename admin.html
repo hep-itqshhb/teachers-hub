@@ -1,30 +1,31 @@
 <!doctype html>
-<html lang="ms-BN">
+<html lang="ms-BN" data-ui-theme="admin">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123f34">
+  <meta name="description" content="Urus pautan, tarikh penting dan makluman Teacher’s Hub ITQSHHB.">
   <meta name="robots" content="noindex">
   <title>Admin | Teacher's Hub ITQSHHB</title>
   <link rel="icon" type="image/png" href="teachers-hub-round-logo.png">
-  <link rel="stylesheet" href="admin.css?v=3">
-  <script src="config.js?v=2" defer></script>
-  <script src="assets/admin.js?v=5" defer></script>
+  <link rel="stylesheet" href="admin.css?v=4">
+  <script src="hub-ui.js?v=1" defer></script>
+  <script src="config.js?v=3" defer></script>
+  <script src="assets/admin.js?v=6" defer></script>
 </head>
-<body>
+<body data-ui-page="admin">
   <header class="admin-header">
     <div class="admin-header-inner">
       <a class="admin-brand" href="/" aria-label="Kembali ke Teacher's Hub">
         <img src="teachers-hub-round-logo.png" alt="" width="46" height="46">
-        <span><strong>Teacher's Hub</strong><small>ITQSHHB · Ruang Admin</small></span>
+        <span><strong>Teacher's Hub</strong><small>ITQSHHB, Ruang Admin</small></span>
       </a>
-      <a class="header-link" href="/">← Laman utama</a>
+      <a class="header-link" href="/">Laman utama</a>
     </div>
   </header>
 
   <main class="admin-main">
     <div class="page-intro">
-      <p class="eyebrow">PUSAT KAWALAN</p>
       <h1>Ruang Admin</h1>
       <p>Pantau penggunaan Akses Pantas dan urus pautan, tarikh penting serta makluman dari satu tempat.</p>
     </div>
@@ -32,7 +33,7 @@
     <p id="admin-status" class="admin-status" role="status" aria-live="polite" hidden></p>
 
     <section id="login-view" class="auth-card" aria-labelledby="login-title">
-      <div class="auth-icon" aria-hidden="true">✦</div>
+      <div class="auth-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 3v5c0 5-4 8-8 10-4-2-8-5-8-10V6l8-3Z"/><path d="m8 12 3 3 5-6"/></svg></div>
       <h2 id="login-title">Log masuk sebagai admin</h2>
       <p>Gunakan akaun Google admin yang telah didaftarkan untuk menerbitkan perubahan.</p>
       <button id="google-login" class="primary-button" type="button">Log masuk dengan Google</button>
@@ -59,14 +60,14 @@
 
       <section class="dashboard-section" id="dashboard" aria-labelledby="dashboard-title">
         <div class="section-heading">
-          <div><p class="eyebrow">RINGKASAN</p><h2 id="dashboard-title">Dashboard penggunaan</h2><p>Kiraan klik bermula selepas ciri ini diterbitkan. Ia bukan bilangan pengguna unik.</p></div>
+          <div><h2 id="dashboard-title">Dashboard penggunaan</h2><p>Kiraan klik bermula selepas ciri ini diterbitkan. Ia bukan bilangan pengguna unik.</p></div>
           <button id="refresh-stats" class="secondary-button" type="button">Muat semula statistik</button>
         </div>
         <div class="metric-grid">
-          <article class="metric-card"><span>Jumlah klik pautan</span><strong id="metric-total-clicks">—</strong><small>Semua Akses Pantas</small></article>
-          <article class="metric-card"><span>Pautan teratas</span><strong class="metric-name" id="metric-top-link">—</strong><small id="metric-top-clicks">Berdasarkan klik</small></article>
-          <article class="metric-card"><span>Pautan aktif</span><strong id="metric-active-links">—</strong><small>Daripada 6 pautan</small></article>
-          <article class="metric-card"><span>Kandungan aktif</span><strong id="metric-active-content">—</strong><small>Tarikh penting &amp; makluman</small></article>
+          <article class="metric-card"><span>Jumlah klik pautan</span><strong id="metric-total-clicks">…</strong><small>Semua Akses Pantas</small></article>
+          <article class="metric-card"><span>Pautan teratas</span><strong class="metric-name" id="metric-top-link">…</strong><small id="metric-top-clicks">Berdasarkan klik</small></article>
+          <article class="metric-card"><span>Pautan aktif</span><strong id="metric-active-links">…</strong><small>Daripada 6 pautan</small></article>
+          <article class="metric-card"><span>Kandungan aktif</span><strong id="metric-active-content">…</strong><small>Tarikh penting &amp; makluman</small></article>
         </div>
         <div class="chart-card">
           <div class="chart-heading"><h3>Klik mengikut pautan</h3><span id="stats-note">Memuatkan statistik…</span></div>
@@ -76,7 +77,7 @@
 
       <section class="editor-section links-section" id="quick-links" aria-labelledby="links-title">
         <div class="section-heading">
-          <div><p class="eyebrow">01 · PAUTAN</p><h2 id="links-title">Urus Akses Pantas</h2><p>Ubah alamat HTTPS, status dan nota ringkas. Pautan yang ditutup tidak boleh dibuka dari laman utama.</p></div>
+          <div><h2 id="links-title">Urus Akses Pantas</h2><p>Ubah alamat HTTPS, status dan nota ringkas. Pautan yang ditutup tidak boleh dibuka dari laman utama.</p></div>
         </div>
         <form id="links-form">
           <div id="links-list" class="links-list"></div>
@@ -87,7 +88,7 @@
       <form id="content-form">
         <section class="editor-section" aria-labelledby="dates-title">
           <div class="section-heading">
-            <div><p class="eyebrow">02 · JADUAL</p><h2 id="dates-title">Tarikh penting</h2><p>Tarikh yang sudah berlalu akan hilang sendiri daripada laman utama.</p></div>
+            <div><h2 id="dates-title">Tarikh penting</h2><p>Tarikh yang sudah berlalu akan hilang sendiri daripada laman utama.</p></div>
             <button id="add-date" class="secondary-button" type="button">+ Tambah tarikh</button>
           </div>
           <p class="entry-count" id="date-count"></p>
@@ -96,7 +97,7 @@
 
         <section class="editor-section" aria-labelledby="announcements-title">
           <div class="section-heading">
-            <div><p class="eyebrow">03 · BERITA</p><h2 id="announcements-title">Makluman warga pendidik</h2><p>Makluman terbaru akan dipaparkan dahulu. Tarikh tamat boleh dibiarkan kosong.</p></div>
+            <div><h2 id="announcements-title">Makluman warga pendidik</h2><p>Makluman terbaru akan dipaparkan dahulu. Tarikh tamat boleh dibiarkan kosong.</p></div>
             <button id="add-announcement" class="secondary-button" type="button">+ Tambah makluman</button>
           </div>
           <p class="entry-count" id="announcement-count"></p>

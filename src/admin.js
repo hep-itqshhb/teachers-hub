@@ -180,6 +180,7 @@ function updateDashboard() {
 async function loadStats() {
   const button = byId("refresh-stats");
   button.disabled = true;
+  button.setAttribute("aria-busy", "true");
   byId("stats-note").textContent = "Memuatkan statistik…";
   try {
     const snapshots = await Promise.all(quickLinks.map(({ id }) => getDoc(doc(db, "linkStats", id))));
@@ -194,6 +195,7 @@ async function loadStats() {
     byId("click-chart").replaceChildren();
   } finally {
     button.disabled = false;
+    button.setAttribute("aria-busy", "false");
   }
 }
 
@@ -253,6 +255,7 @@ byId("links-form").addEventListener("submit", async (event) => {
   if (!event.currentTarget.reportValidity()) return;
   const button = byId("save-links");
   button.disabled = true;
+  button.setAttribute("aria-busy", "true");
   setStatus("Menyimpan pautan Akses Pantas…");
   try {
     await setDoc(quickLinksRef, { links: collectLinks(), updatedAt: serverTimestamp() });
@@ -265,6 +268,7 @@ byId("links-form").addEventListener("submit", async (event) => {
     setStatus(`Tidak dapat menyimpan pautan: ${error.message}`, "error");
   } finally {
     button.disabled = false;
+    button.setAttribute("aria-busy", "false");
   }
 });
 
@@ -272,6 +276,7 @@ byId("content-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!event.currentTarget.reportValidity()) return;
   saveButton.disabled = true;
+  saveButton.setAttribute("aria-busy", "true");
   setStatus("Menyimpan kandungan…");
   try {
     const content = collectContent();
@@ -286,6 +291,7 @@ byId("content-form").addEventListener("submit", async (event) => {
     setStatus(`Tidak dapat menyimpan: ${error.message}`, "error");
   } finally {
     saveButton.disabled = false;
+    saveButton.setAttribute("aria-busy", "false");
   }
 });
 

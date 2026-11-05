@@ -33,7 +33,7 @@ function activityCard(item) {
   if (item.Status && item.Status !== "Disahkan") meta.append(element("span", "weekly-activity-status", item.Status));
   card.append(meta, element("h4", "weekly-activity-title", item.Tajuk));
   const details = [item.Tempat, item.Kategori].filter(Boolean);
-  if (details.length) card.append(element("p", "weekly-activity-details", details.join(" · ")));
+  if (details.length) card.append(element("p", "weekly-activity-details", details.join(", ")));
   return card;
 }
 
@@ -77,6 +77,7 @@ async function refresh() {
   loading = true;
   lastAttempt = Date.now();
   refreshButton.disabled = true;
+  refreshButton.setAttribute("aria-busy", "true");
   refreshButton.textContent = "Mengemas kini…";
   root.setAttribute("aria-busy", "true");
   const controller = new AbortController();
@@ -99,6 +100,7 @@ async function refresh() {
     window.clearTimeout(timeout);
     loading = false;
     refreshButton.disabled = false;
+    refreshButton.setAttribute("aria-busy", "false");
     refreshButton.textContent = "Muat semula";
     root.setAttribute("aria-busy", "false");
   }

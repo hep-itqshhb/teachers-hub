@@ -26,6 +26,7 @@ let initialVerificationPending = false;
 let checkingVerification = false;
 let registrationInProgress = false;
 let lastVerificationCheck = 0;
+let resendLabel = "";
 const resendButton = byId("resend-verification");
 const sentTimeLabel = new Intl.DateTimeFormat("ms-BN", {
   timeZone: "Asia/Brunei", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
@@ -48,9 +49,14 @@ const verificationSender = createVerificationSender({
 function updateResendButton() {
   const { sending, remainingMs } = verificationSender.state(auth.currentUser);
   resendButton.disabled = sending || initialVerificationPending || remainingMs > 0;
-  resendButton.textContent = sending || initialVerificationPending
+  resendButton.setAttribute("aria-busy", String(sending || initialVerificationPending));
+  const label = sending || initialVerificationPending
     ? "Sedang meminta e-mel…"
     : remainingMs > 0 ? `Hantar semula dalam ${Math.ceil(remainingMs / 1000)}s` : "Hantar semula e-mel";
+  if (label !== resendLabel) {
+    resendButton.textContent = label;
+    resendLabel = label;
+  }
 }
 
 function isEduEmail(email) {
@@ -90,6 +96,8 @@ function showForm(mode) {
   byId("register-tab").classList.toggle("is-active", registering);
   byId("login-tab").setAttribute("aria-selected", String(!registering));
   byId("register-tab").setAttribute("aria-selected", String(registering));
+  byId("login-tab").tabIndex = registering ? -1 : 0;
+  byId("register-tab").tabIndex = registering ? 0 : -1;
   byId("auth-heading").textContent = registering ? "Daftar akaun" : "Log masuk";
   byId("auth-intro").textContent = registering
     ? "Daftar menggunakan e-mel rasmi @itqshhb.edu.bn biskita."
@@ -127,6 +135,15 @@ async function sendVerification(user, isResend = false) {
 
 byId("login-tab").addEventListener("click", () => showForm("login"));
 byId("register-tab").addEventListener("click", () => showForm("register"));
+const accountTabs = [byId("login-tab"), byId("register-tab")];
+accountTabs.forEach((tab, index) => tab.addEventListener("keydown", (event) => {
+  const next = event.key === "Home" ? 0 : event.key === "End" ? 1
+    : event.key === "ArrowLeft" || event.key === "ArrowRight" ? 1 - index : null;
+  if (next === null) return;
+  event.preventDefault();
+  showForm(next === 1 ? "register" : "login");
+  accountTabs[next].focus();
+}));
 
 document.querySelectorAll("[data-password-toggle]").forEach((button) => {
   button.addEventListener("click", () => {
@@ -147,6 +164,7 @@ loginForm.addEventListener("submit", async (event) => {
   }
   const submit = loginForm.querySelector('[type="submit"]');
   submit.disabled = true;
+  submit.setAttribute("aria-busy", "true");
   setStatus("Sedang log masuk…");
   try {
     const credential = await signInWithEmailAndPassword(auth, email, loginForm.elements.namedItem("password").value);
@@ -156,6 +174,7 @@ loginForm.addEventListener("submit", async (event) => {
     setStatus(friendlyError(error), "error");
   } finally {
     submit.disabled = false;
+    submit.setAttribute("aria-busy", "false");
   }
 });
 
@@ -178,6 +197,7 @@ registerForm.addEventListener("submit", async (event) => {
   registrationInProgress = true;
   initialVerificationPending = true;
   submit.disabled = true;
+  submit.setAttribute("aria-busy", "true");
   setStatus("Sedang menyediakan akaun…");
   try {
     const credential = await createUserWithEmailAndPassword(auth, email, password);
@@ -218,6 +238,7 @@ registerForm.addEventListener("submit", async (event) => {
     registrationInProgress = false;
     initialVerificationPending = false;
     submit.disabled = false;
+    submit.setAttribute("aria-busy", "false");
     updateResendButton();
   }
 });
@@ -259,6 +280,7 @@ async function checkVerification(manual = false) {
   lastVerificationCheck = Date.now();
   const button = byId("check-verification");
   button.disabled = true;
+  button.setAttribute("aria-busy", "true");
   if (manual) setStatus("Memeriksa pengesahan…");
   try {
     const user = auth.currentUser;
@@ -273,6 +295,7 @@ async function checkVerification(manual = false) {
   } finally {
     checkingVerification = false;
     button.disabled = false;
+    button.setAttribute("aria-busy", "false");
   }
 }
 

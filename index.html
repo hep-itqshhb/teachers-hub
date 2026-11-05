@@ -16,25 +16,29 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="teachers-hub-round-logo.png">
   <link rel="icon" type="image/png" href="teachers-hub-round-logo.png">
-  <link rel="stylesheet" href="styles.css?v=11">
-  <link rel="stylesheet" href="upgrade.css?v=3">
-  <link rel="stylesheet" href="weekly-calendar.css?v=1">
+  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="upgrade.css?v=4">
+  <link rel="stylesheet" href="weekly-calendar.css?v=2">
+  <script src="hub-ui.js?v=1" defer></script>
   <script src="assets/auth-guard.js?v=2" defer></script>
   <script src="config.js?v=3" defer></script>
-  <script src="app.js?v=7" defer></script>
+  <script src="app.js?v=8" defer></script>
   <script src="assets/public-content.js?v=2" defer></script>
-  <script src="assets/weekly-calendar.js?v=1" defer></script>
+  <script src="assets/weekly-calendar.js?v=2" defer></script>
   <script src="upgrade.js?v=3" defer></script>
-  <script src="faq.js?v=4" defer></script>
+  <script src="faq.js?v=5" defer></script>
 
-<style>.visitor-counter-wrap{display:flex;justify-content:flex-end;align-items:center}.visitor-counter-link{min-height:44px;display:inline-flex;align-items:center;border-radius:10px}.visitor-counter-link img{display:block;width:210px;max-width:100%;height:auto}.faq-featured-button svg{width:18px!important;height:18px!important;max-width:18px!important;max-height:18px!important;flex:0 0 18px}@media(max-width:780px){.visitor-counter-wrap{justify-content:flex-start}}</style></head>
-<body>
+<noscript><style>.auth-pending body{visibility:visible}.page-loading{display:none}</style></noscript>
+</head>
+<body data-ui-page="home">
+  <div class="page-loading" role="status"><span class="hub-loader" aria-hidden="true"><span class="hub-loader-mark">T</span></span><span>Menyemak akses…</span></div>
+  <noscript><p class="no-script">Aktifkan JavaScript untuk log masuk dan melihat aktiviti terkini.</p></noscript>
   <a class="skip-link" href="#services">Langkau ke akses pantas</a>
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="#top" aria-label="Teacher's Hub ITQSHHB, halaman utama">
         <img class="brand-logo" src="teachers-hub-round-logo.png" alt="Logo bulat Teacher's Hub" width="56" height="56">
-        <span class="brand-copy"><strong>Teacher's Hub</strong><span>ITQSHHB</span></span>
+        <span class="brand-copy"><strong>Teacher's Hub</strong><span class="wordmark">ITQSHHB</span></span>
       </a>
       <nav class="top-nav" aria-label="Navigasi utama">
         <a href="#services">Akses Pantas</a>
@@ -53,10 +57,9 @@
         <img src="hero-itqshhb.webp?v=7" alt="" width="1366" height="768" fetchpriority="high">
       </div>
       <div class="hero-content">
-        <p class="eyebrow">RUANG DIGITAL WARGA PENDIDIK</p>
-        <h1 id="hero-title">Segala Keperluan Guru,<br><em>Di Satu Tempat.</em></h1>
+        <h1 id="hero-title">Segala Keperluan Guru,<br>Di Satu Tempat.</h1>
         <p class="hero-copy">Platform digital bersepadu untuk memudahkan urusan pelaporan, pemantauan pelajar dan pengurusan aktiviti Institut.</p>
-        <a class="primary-action" href="#services">Lihat Akses Pantas <span aria-hidden="true">↓</span></a>
+        <a class="primary-action" href="#services">Lihat Akses Pantas</a>
       </div>
     </section>
 
@@ -70,7 +73,6 @@
     <section class="services-section" id="services" aria-labelledby="services-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">AKSES UNTUK URUSAN GURU</p>
           <h2 id="services-title">Akses Pantas</h2>
         </div>
         <p class="section-intro">Pilih pautan yang diperlukan untuk memudahkan urusan dan melancarkan tugas harian biskita.</p>
@@ -124,12 +126,11 @@
     <section class="weekly-calendar-section" id="weekly-calendar" aria-labelledby="weekly-calendar-title" aria-busy="true">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">KALENDAR ITQSHHB</p>
           <h2 id="weekly-calendar-title">Aktiviti minggu ini</h2>
           <p class="weekly-calendar-range" id="weekly-calendar-range"></p>
-          <p class="weekly-calendar-note">Isnin–Ahad · Waktu Brunei · Bertukar automatik setiap minggu</p>
+          <p class="weekly-calendar-note">Isnin hingga Ahad, waktu Brunei. Bertukar automatik setiap minggu.</p>
         </div>
-        <a class="weekly-calendar-link" id="weekly-calendar-link" href="https://script.google.com/macros/s/AKfycbxbKeQNSAoQcmg91LcHAv_J9B2QUw8mhATyG44a12zPc-_kA7kOkeV2Q7JlIdPuj22H-g/exec" target="_blank" rel="noopener noreferrer">Buka kalendar penuh ↗</a>
+        <a class="weekly-calendar-link" id="weekly-calendar-link" href="https://script.google.com/macros/s/AKfycbxbKeQNSAoQcmg91LcHAv_J9B2QUw8mhATyG44a12zPc-_kA7kOkeV2Q7JlIdPuj22H-g/exec" target="_blank" rel="noopener noreferrer">Buka kalendar penuh</a>
       </div>
       <div class="weekly-calendar-days" id="weekly-calendar-days">
         <p class="content-loading">Memuatkan aktiviti minggu ini…</p>
@@ -143,7 +144,6 @@
     <section class="important-dates-section" aria-labelledby="important-dates-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">MAKLUMAN TARIKH PENTING</p>
           <h2 id="important-dates-title">Tarikh penting</h2>
         </div>
       </div>
@@ -156,7 +156,6 @@
     <section class="announcements-section" id="announcements" aria-labelledby="announcements-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">PENGUMUMAN TERKINI</p>
           <h2 id="announcements-title">Makluman warga pendidik</h2>
         </div>
         <p class="section-intro">Maklumat ringkas berkaitan portal, borang dan urusan semasa.</p>
@@ -172,7 +171,6 @@
         <div class="faq-compact-card">
           <header class="faq-compact-heading">
             <div>
-              <p class="section-kicker">PANDUAN PENGGUNA</p>
               <h2 id="faq-title">Perlukan bantuan?</h2>
               <p class="faq-subtitle">Lihat jawapan ringkas atau buka Pusat Bantuan untuk mencari semua soalan.</p>
             </div>
@@ -186,7 +184,6 @@
         <div class="faq-dialog-panel">
           <header class="faq-dialog-heading">
             <div>
-              <p class="section-kicker">PUSAT BANTUAN</p>
               <h2 id="faq-dialog-title">Soalan Lazim</h2>
               <p>Cari jawapan mengikut kata kunci atau kategori.</p>
             </div>
@@ -219,10 +216,10 @@
             <summary>Bagaimana Laporan Pelajar Diproses?</summary>
             <div class="faq-process-content">
               <ol class="faq-steps">
-                <li><span class="faq-step-number" aria-hidden="true">01</span><div><h3>Langkah 1 — Laporan Guru</h3><p>Guru mengemukakan laporan melalui borang yang disediakan.</p></div></li>
-                <li><span class="faq-step-number" aria-hidden="true">02</span><div><h3>Langkah 2 — Semakan dan Pengesahan</h3><p>Unit atau pegawai bertanggungjawab meneliti laporan dan mendapatkan maklumat lanjut jika diperlukan.</p></div></li>
-                <li><span class="faq-step-number" aria-hidden="true">03</span><div><h3>Langkah 3 — Pertimbangan dan Tindakan</h3><p>Laporan dihadapkan kepada Timbalan Pengetua Hal Ehwal Pelajar untuk pertimbangan tindakan yang bersesuaian mengikut bidang kuasa.</p></div></li>
-                <li><span class="faq-step-number" aria-hidden="true">04</span><div><h3>Langkah 4 — Pemantauan Susulan</h3><p>Pelaksanaan tindakan, bimbingan atau pemulihan pelajar dipantau mengikut keperluan.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">01</span><div><h3>Langkah 1: Laporan Guru</h3><p>Guru mengemukakan laporan melalui borang yang disediakan.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">02</span><div><h3>Langkah 2: Semakan dan Pengesahan</h3><p>Unit atau pegawai bertanggungjawab meneliti laporan dan mendapatkan maklumat lanjut jika diperlukan.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">03</span><div><h3>Langkah 3: Pertimbangan dan Tindakan</h3><p>Laporan dihadapkan kepada Timbalan Pengetua Hal Ehwal Pelajar untuk pertimbangan tindakan yang bersesuaian mengikut bidang kuasa.</p></div></li>
+                <li><span class="faq-step-number" aria-hidden="true">04</span><div><h3>Langkah 4: Pemantauan Susulan</h3><p>Pelaksanaan tindakan, bimbingan atau pemulihan pelajar dipantau mengikut keperluan.</p></div></li>
               </ol>
               <p class="faq-process-note">Penghantaran laporan ialah langkah awal untuk semakan; tindakan susulan bergantung pada penelitian dan pertimbangan pihak yang diberi kuasa.</p>
             </div>
@@ -234,11 +231,11 @@
 
   </main>
 
-<section class="visitor-section" aria-labelledby="visitor-title"><div class="visitor-panel"><div class="visitor-heading"><p class="section-kicker">STATISTIK LAMAN</p><h2 id="visitor-title">Kunjungan ke Teacher's Hub</h2><p class="visitor-note">Paparan laman hari ini dan jumlah keseluruhan.</p></div><div class="visitor-counter-wrap"><a class="visitor-counter-link" href="https://hits.sh/teachershub-itq.web.app/" target="_blank" rel="noopener noreferrer" aria-label="Lihat statistik paparan Teacher's Hub"><img src="https://hits.sh/teachershub-itq.web.app.svg?view=today-total&amp;style=for-the-badge&amp;label=Paparan&amp;color=%23c9a227&amp;labelColor=%230f4c3a" alt="Kaunter paparan laman: jumlah hari ini dan keseluruhan" loading="lazy" referrerpolicy="no-referrer"></a></div></div></section><footer class="site-footer" id="footer">
+<section class="visitor-section" aria-labelledby="visitor-title"><div class="visitor-panel"><div class="visitor-heading"><h2 id="visitor-title">Kunjungan ke Teacher's Hub</h2><p class="visitor-note">Paparan laman hari ini dan jumlah keseluruhan.</p></div><div class="visitor-counter-wrap"><a class="visitor-counter-link" href="https://hits.sh/teachershub-itq.web.app/" target="_blank" rel="noopener noreferrer" aria-label="Lihat statistik paparan Teacher's Hub"><img src="https://hits.sh/teachershub-itq.web.app.svg?view=today-total&amp;style=for-the-badge&amp;label=Paparan&amp;color=%23c9a227&amp;labelColor=%230f4c3a" alt="Kaunter paparan laman: jumlah hari ini dan keseluruhan" loading="lazy" referrerpolicy="no-referrer"></a></div></div></section><footer class="site-footer" id="footer">
     <div class="footer-inner">
-      <div class="footer-brand"><img src="teachers-hub-round-logo.png" alt="" width="38" height="38"><div><strong>Teacher's Hub <span>| ITQSHHB</span></strong><p>Institut Tahfiz Al-Quran Sultan Haji Hassanal Bolkiah</p></div></div>
+      <div class="footer-brand"><img src="teachers-hub-round-logo.png" alt="" width="38" height="38"><div><strong>Teacher's Hub <span class="wordmark">| ITQSHHB</span></strong><p>Institut Tahfiz Al-Quran Sultan Haji Hassanal Bolkiah</p></div></div>
       <p class="footer-note">Dibangunkan untuk kegunaan warga pendidik ITQSHHB.</p>
-      <div class="footer-bottom"><span>© <span id="current-year"></span> ITQSHHB</span><a data-footer-bpp target="_blank" rel="noopener noreferrer">Laman Web BPP <span aria-hidden="true">↗</span></a><a href="/admin.html">Admin</a></div>
+      <div class="footer-bottom"><span class="wordmark">© <span id="current-year"></span> ITQSHHB</span><a data-footer-bpp target="_blank" rel="noopener noreferrer">Laman Web BPP</a><a href="/admin.html">Admin</a></div>
     </div>
   </footer>
 
