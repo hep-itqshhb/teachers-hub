@@ -38,6 +38,16 @@ Shared system for the main portal, account screens and administration.
 Small Georgia letter T, 20px, uses a 1.25-second opacity/translation loop only during loading.
 No artificial loading delays or decorative entrances. Reduced motion shows a static T.
 
+## Portal refinements
+
+- The opening uses the original photograph beside a deep-teal field, Georgia title and direct service/calendar actions.
+- Phone navigation groups teacher tasks, institutional information and help in a native modal menu.
+- The calendar remains restricted to the current Brunei Monday–Sunday week. Seven day buttons select one daily agenda, defaulting to today and resetting on a new Brunei day.
+- Date-stamped nearest-activity guidance excludes finished and cancelled activities; details open in a native dialog using text-only source fields.
+- Keep selected days and cached activities on failed refresh. Unchanged refreshes preserve the existing agenda DOM and focus.
+- Short button labels remain readable at 320px; full activity names stay in headings. Three-line day choices and complete FAQ questions intentionally use larger controls.
+- Service hover changes only the border; native dialogs use short opacity/transform transitions and respect reduced motion. The small T remains tied to real loading.
+
 ## Exports
 
 `tokens.css`, `base.css` and `hub-ui.js` serve all three pages.

@@ -1,6 +1,5 @@
 /* Hallmark · scope: app · theme: brand · redesign: full · accessible help and disclosure · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V4 · weakest: E, use a native dialog with visible focus and stable geometry */
-/* Hallmark · waive 39b · FAQ tiles contain complete Malay questions · question disclosures need larger targets than compact toolbar controls */
 .faq-section { border-top: 1px solid var(--line); background: var(--white); }
 .faq-compact-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); }
 .faq-subtitle { max-width: 55ch; margin: var(--space-sm) 0 0; color: var(--muted); font-size: 14px; line-height: 1.65; }

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { bruneiDay, currentWeek, validDay, weekActivities } from "../src/calendar-week.mjs";
+import { bruneiDay, currentWeek, validDay, weekActivities, nextWeekActivity } from "../src/calendar-week.mjs";
 
 const activity = (title, start, end = start, extra = {}) => ({ Tajuk: title, TarikhMula: start, TarikhTamat: end, Status: "Disahkan", ...extra });
 
@@ -60,4 +60,33 @@ test("ignores canceled, reversed, invalid, and incomplete rows", () => {
 test("an empty week remains empty instead of displaying future activities", () => {
   const week = currentWeek(new Date("2026-12-07T12:00:00+08:00"));
   assert.ok(weekActivities([activity("Next month", "2027-01-04")], week).every((d) => d.activities.length === 0));
+});
+
+test("nearest activity excludes finished, cancelled and next-week events", () => {
+  const now = new Date("2026-11-05T10:00:00+08:00");
+  const week = currentWeek(now);
+  const items = [
+    activity("Finished", week.today, "", { MasaMula: "08:00", MasaTamat: "09:00" }),
+    activity("Cancelled", week.today, "", { MasaMula: "10:30", Status: "Batal" }),
+    activity("Afternoon", week.today, "", { MasaMula: "14:00", MasaTamat: "15:00" }),
+    activity("Next week", "2026-11-09", "", { MasaMula: "07:00" })
+  ];
+  assert.equal(nextWeekActivity(items, week, now).item.Tajuk, "Afternoon");
+  assert.equal(nextWeekActivity(items, week, new Date("2026-11-05T16:00:00+08:00")), null);
+});
+
+test("nearest activity includes an ongoing multi-day event on today's date", () => {
+  const now = new Date("2026-11-05T10:00:00+08:00");
+  const event = activity("Ongoing", "2026-11-01", "2026-11-06", { SepanjangHari: "Ya" });
+  const next = nextWeekActivity([event], currentWeek(now), now);
+  assert.equal(next.item, event);
+  assert.equal(next.date, "2026-11-05");
+});
+
+test("nearest activity respects the visitor-independent Brunei week rollover", () => {
+  const event = activity("New Monday", "2026-11-09", "", { MasaMula: "08:00" });
+  const before = new Date("2026-11-08T15:59:59Z");
+  const after = new Date("2026-11-08T16:00:00Z");
+  assert.equal(nextWeekActivity([event], currentWeek(before), before), null);
+  assert.equal(nextWeekActivity([event], currentWeek(after), after).date, "2026-11-09");
 });

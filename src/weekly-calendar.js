@@ -1,4 +1,4 @@
-import { currentWeek, weekActivities } from "./calendar-week.mjs";
+import { currentWeek, weekActivities, nextWeekActivity } from "./calendar-week.mjs";
 
 const REFRESH_MS = 5 * 60 * 1000;
 const root = document.getElementById("weekly-calendar");
@@ -14,6 +14,14 @@ let loadedAt = null;
 let renderedDay = "";
 let loading = false;
 let lastAttempt = 0;
+let selectedDay = "";
+let renderSignature = "";
+let activityTrigger = null;
+const picker = document.getElementById("weekly-day-picker");
+const overview = document.getElementById("weekly-overview");
+const upcoming = document.getElementById("weekly-upcoming");
+const activityDialog = document.getElementById("activity-dialog");
+const shortWeekday = new Intl.DateTimeFormat("ms-BN", { timeZone: "UTC", weekday: "short" });
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -31,22 +39,84 @@ function activityCard(item) {
   const time = allDay ? "Sepanjang hari" : start ? `${start}${end ? `–${end}` : ""}` : "Masa belum dinyatakan";
   meta.append(element("span", "weekly-activity-time", time));
   if (item.Status && item.Status !== "Disahkan") meta.append(element("span", "weekly-activity-status", item.Status));
-  card.append(meta, element("h4", "weekly-activity-title", item.Tajuk));
+  const heading = element("h4", "weekly-activity-title");
+  const open = element("button", "weekly-activity-open", "Lihat butiran");
+  open.type = "button";
+  open.setAttribute("aria-haspopup", "dialog");
+  open.setAttribute("aria-label", `Lihat butiran ${item.Tajuk}`);
+  open.addEventListener("click", () => {
+    activityTrigger = open;
+    document.getElementById("activity-dialog-title").textContent = item.Tajuk;
+    const details = document.getElementById("activity-dialog-details");
+    details.replaceChildren();
+    const label = (day) => dateLabel.format(new Date(`${day}T00:00:00Z`));
+    const dates = item.TarikhTamat && item.TarikhTamat !== item.TarikhMula
+      ? `${label(item.TarikhMula)} – ${label(item.TarikhTamat)}` : label(item.TarikhMula);
+    for (const [name, value] of [["Tarikh", dates], ["Masa", time], ["Tempat", item.Tempat || "Belum dinyatakan"], ["Kategori", item.Kategori], ["Penganjur", item.Penganjur], ["Terlibat", item.PihakTerlibat], ["Penyelaras", item.PegawaiPenyelaras], ["Status", item.Status], ["Catatan", item.Catatan]]) {
+      if (value) details.append(element("dt", "", name), element("dd", "", String(value)));
+    }
+    activityDialog.showModal();
+  });
+  heading.textContent = item.Tajuk;
+  card.append(meta, heading);
   const details = [item.Tempat, item.Kategori].filter(Boolean);
   if (details.length) card.append(element("p", "weekly-activity-details", details.join(", ")));
+  card.append(open);
   return card;
+}
+
+function selectDay(date, announce = true) {
+  selectedDay = date;
+  picker.querySelectorAll("button").forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.date === date)));
+  list.querySelectorAll(".weekly-day").forEach((row) => { row.hidden = row.dataset.date !== date; });
+  if (announce) {
+    const row = [...list.children].find((node) => node.dataset.date === date);
+    const day = new Date(`${date}T00:00:00Z`);
+    document.getElementById("weekly-selection-status").textContent = row
+      ? `${weekdayLabel.format(day)}, ${dateLabel.format(day)}. ${row.querySelectorAll(".weekly-activity").length} aktiviti.` : "";
+  }
 }
 
 function renderWeek() {
   const week = currentWeek();
+  if (!selectedDay || renderedDay !== week.today || !week.days.includes(selectedDay)) selectedDay = week.today;
   renderedDay = week.today;
   const label = (day) => dateLabel.format(new Date(`${day}T00:00:00Z`));
   range.textContent = `${label(week.start)} – ${label(week.end)}`;
   root.dataset.weekStart = week.start;
   if (activities === null) return;
+  const days = weekActivities(activities, week);
+  const todayCount = days.find((day) => day.date === week.today).activities.length;
+  document.getElementById("weekly-today-summary").textContent = todayCount
+    ? `${todayCount} aktiviti hari ini. Pilih hari untuk melihat jadual.` : "Tiada aktiviti dijadualkan hari ini. Semak hari lain dalam minggu ini.";
+  const next = nextWeekActivity(activities, week);
+  document.getElementById("weekly-upcoming-wrap").hidden = !next;
+  if (next) {
+    document.getElementById("weekly-upcoming-title").textContent = `Aktiviti terdekat ${label(next.date)}: ${next.item.Tajuk}`;
+    upcoming.onclick = () => { selectDay(next.date); picker.querySelector(`[data-date="${next.date}"]`).focus(); };
+  }
+  overview.hidden = false;
+  picker.hidden = false;
+  const signature = JSON.stringify([week.today, days]);
+  if (signature === renderSignature) { selectDay(selectedDay, false); return; }
+  renderSignature = signature;
+  const focusedDate = picker.contains(document.activeElement) ? document.activeElement.dataset.date : null;
   const fragment = document.createDocumentFragment();
-  for (const day of weekActivities(activities, week)) {
+  const choices = document.createDocumentFragment();
+  for (const day of days) {
+    const choice = element("button", `weekly-day-choice${day.date === week.today ? " is-today" : ""}`);
+    choice.type = "button";
+    choice.dataset.date = day.date;
+    choice.setAttribute("aria-controls", `agenda-${day.date}`);
+    choice.setAttribute("aria-label", `${weekdayLabel.format(new Date(`${day.date}T00:00:00Z`))}, ${label(day.date)}${day.date === week.today ? ", hari ini" : ""}, ${day.activities.length} aktiviti`);
+    choice.append(element("span", "weekly-choice-name", shortWeekday.format(new Date(`${day.date}T00:00:00Z`))),
+      element("span", "weekly-choice-date", String(Number(day.date.slice(-2)))),
+      element("span", "weekly-choice-count", day.activities.length ? `${day.activities.length} aktiviti` : "Tiada aktiviti"));
+    choice.addEventListener("click", () => selectDay(day.date));
+    choices.append(choice);
     const row = element("div", `weekly-day${day.date === week.today ? " is-today" : ""}`);
+    row.dataset.date = day.date;
+    row.id = `agenda-${day.date}`;
     const heading = element("h3", "weekly-day-heading");
     const date = new Date(`${day.date}T00:00:00Z`);
     const time = element("time", "weekly-day-date");
@@ -64,7 +134,10 @@ function renderWeek() {
     }
     fragment.append(row);
   }
+  picker.replaceChildren(choices);
   list.replaceChildren(fragment);
+  selectDay(selectedDay, false);
+  if (focusedDate) picker.querySelector(`[data-date="${week.days.includes(focusedDate) ? focusedDate : selectedDay}"]`)?.focus();
 }
 
 async function refresh() {
@@ -120,6 +193,21 @@ async function start() {
   const fullCalendar = document.getElementById("weekly-calendar-link");
   fullCalendar.href = HUB_CONFIG.links.kalendar;
   refreshButton.addEventListener("click", refresh);
+  activityDialog.addEventListener("close", () => {
+    if (activityTrigger?.isConnected) activityTrigger.focus();
+    else picker.querySelector('[aria-pressed="true"]')?.focus();
+  });
+  picker.addEventListener("keydown", (event) => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+    const buttons = [...picker.querySelectorAll("button")];
+    const index = buttons.indexOf(document.activeElement);
+    if (index < 0) return;
+    event.preventDefault();
+    const next = event.key === "Home" ? 0 : event.key === "End" ? buttons.length - 1
+      : (index + (event.key === "ArrowRight" ? 1 : -1) + buttons.length) % buttons.length;
+    buttons[next].focus();
+    selectDay(buttons[next].dataset.date);
+  });
   window.addEventListener("online", refresh);
   window.addEventListener("offline", () => { renderWeek(); showFailure(); });
   const check = () => {

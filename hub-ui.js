@@ -34,6 +34,26 @@
   observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["aria-busy"] });
   decorate();
 
+  const menu = document.getElementById("portal-menu");
+  const menuToggle = document.getElementById("portal-menu-toggle");
+  if (menu && menuToggle) {
+    menuToggle.addEventListener("click", () => {
+      menu.showModal();
+      menuToggle.setAttribute("aria-expanded", "true");
+    });
+    menu.addEventListener("close", () => menuToggle.setAttribute("aria-expanded", "false"));
+    menu.addEventListener("cancel", () => menuToggle.setAttribute("aria-expanded", "false"));
+    menu.querySelectorAll('a[href^="#"]').forEach((link) => link.addEventListener("click", () => {
+      menu.close();
+      menuToggle.setAttribute("aria-expanded", "false");
+      const target = document.querySelector(link.hash);
+      if (target) {
+        if (!target.hasAttribute("tabindex")) target.tabIndex = -1;
+        target.focus({ preventScroll: true });
+      }
+    }));
+  }
+
   const shortcuts = [...document.querySelectorAll(".section-shortcuts a")];
   if (shortcuts.length && "IntersectionObserver" in window) {
     const observed = new Map();

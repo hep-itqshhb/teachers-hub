@@ -16,15 +16,15 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="teachers-hub-round-logo.png">
   <link rel="icon" type="image/png" href="teachers-hub-round-logo.png">
-  <link rel="stylesheet" href="styles.css?v=13">
+  <link rel="stylesheet" href="styles.css?v=14">
   <link rel="stylesheet" href="upgrade.css?v=4">
-  <link rel="stylesheet" href="weekly-calendar.css?v=2">
-  <script src="hub-ui.js?v=1" defer></script>
+  <link rel="stylesheet" href="weekly-calendar.css?v=3">
+  <script src="hub-ui.js?v=2" defer></script>
   <script src="assets/auth-guard.js?v=2" defer></script>
   <script src="config.js?v=3" defer></script>
   <script src="app.js?v=8" defer></script>
   <script src="assets/public-content.js?v=2" defer></script>
-  <script src="assets/weekly-calendar.js?v=2" defer></script>
+  <script src="assets/weekly-calendar.js?v=3" defer></script>
   <script src="upgrade.js?v=3" defer></script>
   <script src="faq.js?v=5" defer></script>
 
@@ -42,24 +42,36 @@
       </a>
       <nav class="top-nav" aria-label="Navigasi utama">
         <a href="#services">Akses Pantas</a>
+        <a href="#weekly-calendar">Aktiviti</a>
         <a href="#important-dates-title">Tarikh</a>
         <a href="#announcements">Makluman</a>
         <a href="#faq">Bantuan</a>
         <span class="member-menu"><span id="member-name"></span><button id="member-signout" type="button">Keluar</button></span>
         <button class="install-button" id="install-app" type="button" hidden>Pasang</button>
+        <button class="portal-menu-toggle" id="portal-menu-toggle" type="button" aria-haspopup="dialog" aria-controls="portal-menu" aria-expanded="false">Menu <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12"/></svg></button>
       </nav>
     </div>
   </header>
+
+  <dialog class="portal-menu" id="portal-menu" aria-labelledby="portal-menu-title">
+    <div class="portal-menu-heading"><h2 id="portal-menu-title">Teacher’s Hub</h2><form method="dialog"><button type="submit" aria-label="Tutup menu">Tutup <span aria-hidden="true">×</span></button></form></div>
+    <nav aria-label="Menu portal">
+      <div class="portal-menu-group"><h3>Urusan guru</h3><a href="#services">Borang dan perkhidmatan</a><a href="#weekly-calendar">Aktiviti minggu ini</a></div>
+      <div class="portal-menu-group"><h3>Maklumat Institut</h3><a href="#important-dates-title">Tarikh penting</a><a href="#announcements">Makluman warga pendidik</a></div>
+      <div class="portal-menu-group"><h3>Bantuan dan hubungan</h3><a href="#faq">Pusat Bantuan</a><a href="#footer">Alamat dan laman rasmi</a></div>
+    </nav>
+  </dialog>
 
   <main id="top">
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero-media" aria-hidden="true">
         <img src="hero-itqshhb.webp?v=7" alt="" width="1366" height="768" fetchpriority="high">
+        <span class="hero-place">Institut Tahfiz Al-Quran<br>Sultan Haji Hassanal Bolkiah</span>
       </div>
       <div class="hero-content">
         <h1 id="hero-title">Segala Keperluan Guru,<br>Di Satu Tempat.</h1>
         <p class="hero-copy">Platform digital bersepadu untuk memudahkan urusan pelaporan, pemantauan pelajar dan pengurusan aktiviti Institut.</p>
-        <a class="primary-action" href="#services">Lihat Akses Pantas</a>
+        <div class="hero-actions"><a class="primary-action" href="#services">Akses Pantas</a><a class="hero-calendar-action" href="#weekly-calendar">Aktiviti minggu ini <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12m-5-5 5 5-5 5"/></svg></a></div>
       </div>
     </section>
 
@@ -132,9 +144,20 @@
         </div>
         <a class="weekly-calendar-link" id="weekly-calendar-link" href="https://script.google.com/macros/s/AKfycbxbKeQNSAoQcmg91LcHAv_J9B2QUw8mhATyG44a12zPc-_kA7kOkeV2Q7JlIdPuj22H-g/exec" target="_blank" rel="noopener noreferrer">Buka kalendar penuh</a>
       </div>
+      <div class="weekly-overview" id="weekly-overview" hidden>
+        <p id="weekly-today-summary"></p>
+        <div class="weekly-upcoming-wrap" id="weekly-upcoming-wrap" hidden><p id="weekly-upcoming-title"></p><button type="button" class="weekly-upcoming" id="weekly-upcoming">Lihat jadual</button></div>
+      </div>
+      <div class="weekly-day-picker" id="weekly-day-picker" role="group" aria-label="Pilih hari minggu ini" hidden></div>
+      <p class="weekly-selection-status visually-hidden" id="weekly-selection-status" role="status"></p>
       <div class="weekly-calendar-days" id="weekly-calendar-days">
         <p class="content-loading">Memuatkan aktiviti minggu ini…</p>
       </div>
+      <dialog class="activity-dialog" id="activity-dialog" aria-labelledby="activity-dialog-title">
+        <div class="activity-dialog-heading"><h2 id="activity-dialog-title"></h2><form method="dialog"><button type="submit" aria-label="Tutup butiran aktiviti">Tutup <span aria-hidden="true">×</span></button></form></div>
+        <dl id="activity-dialog-details"></dl>
+        <p class="activity-dialog-note">Maklumat daripada Kalendar ITQSHHB. Perubahan terkini tertakluk pada kemas kini sumber.</p>
+      </dialog>
       <div class="weekly-calendar-footer">
         <p class="weekly-calendar-status" id="weekly-calendar-status" role="status">Menyambung ke Kalendar ITQSHHB…</p>
         <button class="weekly-calendar-refresh" id="weekly-calendar-refresh" type="button">Muat semula</button>
@@ -235,7 +258,7 @@
     <div class="footer-inner">
       <div class="footer-grid">
         <div class="footer-institute">
-          <div class="footer-brand"><img src="teachers-hub-round-logo.png" alt="" width="48" height="48"><div><strong>ITQSHHB</strong><p>Institut Tahfiz Al-Quran<br>Sultan Haji Hassanal Bolkiah</p></div></div>
+          <div class="footer-brand"><img src="teachers-hub-round-logo.png" alt="" width="48" height="48"><div><strong class="wordmark">ITQSHHB</strong><p>Institut Tahfiz Al-Quran<br>Sultan Haji Hassanal Bolkiah</p></div></div>
           <address class="footer-address">
             <a class="footer-contact" href="https://www.google.com/maps/search/?api=1&amp;query=ITQSHHB%2C%20Spg%20175%2C%20KM2%20Jalan%20Raja%20Isteri%20Pengiran%20Anak%20Saleha%2C%20Bandar%20Seri%20Begawan%20BA2112%2C%20Brunei" target="_blank" rel="noopener noreferrer" aria-label="Lihat alamat ITQSHHB di Google Maps">
               <svg class="footer-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"></path><circle cx="12" cy="10" r="2.5"></circle></svg>

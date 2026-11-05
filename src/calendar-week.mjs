@@ -40,3 +40,19 @@ export function weekActivities(activities, week) {
       .sort((a, b) => (a.MasaMula || "99:99").localeCompare(b.MasaMula || "99:99") || a.Tajuk.localeCompare(b.Tajuk, "ms"))
   }));
 }
+
+// Return only a still-current or future activity in the visible Brunei week.
+export function nextWeekActivity(activities, week, now = new Date()) {
+  const visible = [...new Set(weekActivities(activities, week).flatMap((day) => day.activities))];
+  const stamp = (day, time) => new Date(`${day}T${time}:00+08:00`).getTime();
+  const hasTime = (value) => typeof value === "string" && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(value);
+  return visible.map((item) => {
+    const allDay = /^(ya|true)$/i.test(String(item.SepanjangHari || ""));
+    const start = stamp(item.TarikhMula, !allDay && hasTime(item.MasaMula) ? item.MasaMula : "00:00");
+    const endDay = item.TarikhTamat || item.TarikhMula;
+    const end = stamp(endDay, !allDay && hasTime(item.MasaTamat) ? item.MasaTamat
+      : !allDay && hasTime(item.MasaMula) && endDay === item.TarikhMula ? item.MasaMula : "23:59");
+    return { item, start, end, date: item.TarikhMula < week.today ? week.today : item.TarikhMula };
+  }).filter((event) => event.end >= now.getTime())
+    .sort((a, b) => a.start - b.start || a.item.Tajuk.localeCompare(b.item.Tajuk, "ms"))[0] || null;
+}
