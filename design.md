@@ -47,6 +47,7 @@ No artificial loading delays or decorative entrances. Reduced motion shows a sta
 - Keep selected days and cached activities on failed refresh. Unchanged refreshes preserve the existing agenda DOM and focus.
 - Short button labels remain readable at 320px; full activity names stay in headings. Three-line day choices and complete FAQ questions intentionally use larger controls.
 - Service hover changes only the border; native dialogs use short opacity/transform transitions and respect reduced motion. The small T remains tied to real loading.
+- Quick access shows six lightweight dimensional SVG icons and short titles. Full service names, descriptions, live availability and notes appear in a native dialog before the external action. Privacy/help stay available in the dialog. Firestore link/status overrides and outbound click recording are preserved.
 
 ## Exports
 

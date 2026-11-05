@@ -1,7 +1,6 @@
 (() => {
   const actionIcons = {
-    external: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11 3h6v6M17 3l-8 8"/><path d="M15 11v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>',
-    unavailable: '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.5"/><path d="M10 6v4M10 13.5h.01"/></svg>'
+    external: '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M11 3h6v6M17 3l-8 8"/><path d="M15 11v5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/></svg>'
   };
 
   const labels = {
@@ -24,56 +23,82 @@
   };
 
   const footerBpp = document.querySelector("[data-footer-bpp]");
+  const dialog = document.getElementById("service-dialog");
+  const serviceInfo = {
+    disiplin: { title: "Laporan Kes Disiplin", description: "Laporkan salah laku pelajar melalui borang ini untuk perhatian dan tindakan pihak Hal Ehwal Pelajar." },
+    hafazan: { title: "Kemajuan Hafazan Al-Quran", description: "Catat perkembangan hafazan, bacaan dan perkara berkaitan Al-Quran seseorang pelajar melalui borang ini." },
+    akademik: { title: "Kemajuan Akademik", description: "Sampaikan laporan tentang perkembangan, pencapaian atau keperluan sokongan akademik seseorang pelajar." },
+    aktiviti: { title: "Laporan Aktiviti Pelajar", description: "Borang laporan terperinci bagi aktiviti yang dianjurkan, untuk diisi oleh Ketua Bahagian (HOD) atau penganjur aktiviti." },
+    kalendar: { title: "Kalendar Aktiviti", description: "Semak kalendar aktiviti Institut dalam satu paparan." },
+    bpp: { title: "Bahagian Pembangunan Pelajar", description: "Akses maklumat, aktiviti, pengumuman dan sumber rasmi Bahagian Pembangunan Pelajar." }
+  };
+  let settings = {};
+  let activeService = null;
+  let serviceTrigger = null;
   const recordClick = (service) => {
     window.hubContentStore?.recordClick(service)?.catch(() => {});
   };
 
-  const renderServices = (savedLinks = {}) => {
-    document.querySelectorAll("[data-service]").forEach((card) => {
-      const service = card.dataset.service;
-      const slot = card.querySelector("[data-action]");
-      const fallback = HUB_CONFIG?.serviceStatus?.[service] || { status: "active", note: "" };
-      const setting = savedLinks[service] || { url: HUB_CONFIG?.links?.[service] || "", ...fallback };
-      const stateName = ["active", "maintenance", "closed"].includes(setting.status) ? setting.status : "closed";
-      card.querySelector(".service-meta")?.remove();
-      slot.replaceChildren();
-
-      const status = document.createElement("div");
-      status.className = `service-meta service-meta--${stateName}`;
-      const badge = document.createElement("span");
-      badge.className = "service-status";
-      badge.textContent = stateName === "maintenance" ? "Penyelenggaraan" : stateName === "closed" ? "Ditutup" : "Aktif";
-      status.append(badge);
-      if (setting.note) {
-        const note = document.createElement("span");
-        note.className = "service-note";
-        note.textContent = setting.note;
-        status.append(note);
-      }
-      card.insertBefore(status, slot);
-
-      const url = stateName === "active" ? safeExternalUrl(setting.url) : null;
-      if (url) {
-        const link = document.createElement("a");
-        link.className = "card-link";
-        link.href = url;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        link.setAttribute("aria-label", `${labels[service]} (dibuka pada tab baharu)`);
-        const action = service === "kalendar" ? "Lihat kalendar" : service === "bpp" ? "Buka laman BPP" : "Buka borang";
-        link.innerHTML = `${action} ${actionIcons.external}`;
-        link.addEventListener("click", () => recordClick(service));
-        slot.append(link);
-        return;
-      }
-
-      const state = document.createElement("span");
-      state.className = "unavailable";
-      const unavailableLabel = stateName === "maintenance" ? "Pautan sedang diselenggara" : stateName === "closed" ? "Pautan ditutup" : "Pautan belum tersedia";
-      state.setAttribute("aria-label", unavailableLabel);
-      state.innerHTML = `${actionIcons.unavailable}<span>${unavailableLabel}</span>`;
+  const renderServiceDialog = (service) => {
+    const info = serviceInfo[service];
+    const fallback = HUB_CONFIG?.serviceStatus?.[service] || { status: "active", note: "" };
+    const setting = settings[service] || { url: HUB_CONFIG?.links?.[service] || "", ...fallback };
+    const stateName = ["active", "maintenance", "closed"].includes(setting.status) ? setting.status : "closed";
+    document.getElementById("service-dialog-title").textContent = info.title;
+    document.getElementById("service-dialog-description").textContent = info.description;
+    document.getElementById("service-dialog-icon").src = `icons/${service}.svg?v=1`;
+    const meta = document.getElementById("service-dialog-meta");
+    const status = document.createElement("span");
+    status.className = "service-status";
+    status.textContent = stateName === "maintenance" ? "Penyelenggaraan" : stateName === "closed" ? "Ditutup" : "Aktif";
+    meta.className = `service-dialog-meta service-meta--${stateName}`;
+    meta.replaceChildren(status);
+    if (setting.note) {
+      const note = document.createElement("span");
+      note.textContent = setting.note;
+      meta.append(note);
+    }
+    const slot = document.getElementById("service-dialog-action");
+    const focusedAction = slot.contains(document.activeElement);
+    slot.replaceChildren();
+    const url = stateName === "active" ? safeExternalUrl(setting.url) : null;
+    document.getElementById("service-new-tab-note").hidden = !url;
+    if (url) {
+      const link = document.createElement("a");
+      link.className = "service-outbound primary-action";
+      link.href = url;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.setAttribute("aria-label", `${labels[service]} (dibuka pada tab baharu)`);
+      const action = service === "kalendar" ? "Lihat kalendar" : service === "bpp" ? "Buka laman BPP" : "Buka borang";
+      link.innerHTML = `${action} ${actionIcons.external}`;
+      link.addEventListener("click", () => recordClick(service));
+      slot.append(link);
+      if (focusedAction) link.focus();
+    } else {
+      const state = document.createElement("p");
+      state.className = "service-unavailable";
+      state.textContent = stateName === "maintenance" ? "Pautan sedang diselenggara." : stateName === "closed" ? "Pautan ditutup." : "Pautan belum tersedia.";
       slot.append(state);
-    });
+      if (focusedAction) dialog.querySelector(".service-dialog-close").focus();
+    }
+  };
+
+  document.querySelectorAll("[data-service]").forEach((button) => button.addEventListener("click", () => {
+    activeService = button.dataset.service;
+    serviceTrigger = button;
+    dialog.querySelector(".service-help").open = false;
+    renderServiceDialog(activeService);
+    dialog.showModal();
+  }));
+  dialog.addEventListener("close", () => {
+    activeService = null;
+    serviceTrigger?.focus();
+  });
+
+  const renderServices = (savedLinks = {}) => {
+    settings = savedLinks;
+    if (dialog.open && activeService) renderServiceDialog(activeService);
 
     const bpp = savedLinks.bpp || { url: HUB_CONFIG?.links?.bpp || "", ...(HUB_CONFIG?.serviceStatus?.bpp || { status: "active" }) };
     const bppUrl = bpp.status === "active" ? safeExternalUrl(bpp.url) : null;

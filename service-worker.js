@@ -1,4 +1,4 @@
-const CACHE_NAME = "teachers-hub-v20";
+const CACHE_NAME = "teachers-hub-v21";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -9,12 +9,18 @@ const APP_SHELL = [
   "/auth.html",
   "/auth.css?v=2",
   "/admin.css?v=4",
-  "/styles.css?v=14",
+  "/styles.css?v=15",
   "/upgrade.css?v=4",
   "/weekly-calendar.css?v=3",
   "/assets/weekly-calendar.js?v=3",
   "/config.js?v=3",
-  "/app.js?v=8",
+  "/app.js?v=9",
+  "/icons/disiplin.svg?v=1",
+  "/icons/hafazan.svg?v=1",
+  "/icons/akademik.svg?v=1",
+  "/icons/aktiviti.svg?v=1",
+  "/icons/kalendar.svg?v=1",
+  "/icons/bpp.svg?v=1",
   "/assets/public-content.js?v=2",
   "/assets/admin.js?v=6",
   "/assets/auth.js?v=5",
