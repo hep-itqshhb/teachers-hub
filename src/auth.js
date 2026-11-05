@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  getIdToken,
   onAuthStateChanged,
   reload,
   sendEmailVerification,
@@ -11,6 +12,7 @@ import {
 } from "firebase/auth";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore/lite";
 import { ADMIN_EMAIL, app, db } from "./firebase-client.js";
+import { createVerificationSender } from "./verification-state.mjs";
 
 const auth = getAuth(app);
 auth.useDeviceLanguage();
@@ -20,7 +22,36 @@ const verifyView = byId("verify-view");
 const loginForm = byId("login-form");
 const registerForm = byId("register-form");
 const status = byId("auth-status");
-let verificationSentAt = 0;
+let initialVerificationPending = false;
+let checkingVerification = false;
+let registrationInProgress = false;
+let lastVerificationCheck = 0;
+const resendButton = byId("resend-verification");
+const sentTimeLabel = new Intl.DateTimeFormat("ms-BN", {
+  timeZone: "Asia/Brunei", hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"
+});
+const verificationSender = createVerificationSender({
+  now: () => Date.now(),
+  send: (user) => sendEmailVerification(user, {
+    url: "https://teachershub-itq.web.app/auth.html?verified=1",
+    handleCodeInApp: false
+  }),
+  readSentAt: (uid) => {
+    try { return Number(sessionStorage.getItem(`hub-verification:${uid}`)) || 0; } catch { return 0; }
+  },
+  writeSentAt: (uid, sentAt) => {
+    try { sessionStorage.setItem(`hub-verification:${uid}`, String(sentAt)); } catch { /* Storage can be unavailable in private browsing. */ }
+  },
+  onChange: updateResendButton
+});
+
+function updateResendButton() {
+  const { sending, remainingMs } = verificationSender.state(auth.currentUser);
+  resendButton.disabled = sending || initialVerificationPending || remainingMs > 0;
+  resendButton.textContent = sending || initialVerificationPending
+    ? "Sedang meminta e-mel…"
+    : remainingMs > 0 ? `Hantar semula dalam ${Math.ceil(remainingMs / 1000)}s` : "Hantar semula e-mel";
+}
 
 function isEduEmail(email) {
   return /^[A-Z0-9._%+-]+@itqshhb\.edu\.bn$/i.test(email.trim());
@@ -70,20 +101,28 @@ function showVerification(user) {
   formsView.hidden = true;
   verifyView.hidden = false;
   byId("verify-email").textContent = user.email || "e-mel biskita";
+  updateResendButton();
 }
 
 async function sendVerification(user, isResend = false) {
-  const now = Date.now();
-  if (isResend && now - verificationSentAt < 30000) {
-    setStatus("Tunggu 30 saat sebelum menghantar semula.");
+  const current = verificationSender.state(user);
+  if (current.sending) return;
+  if (current.remainingMs > 0) {
+    if (isResend) setStatus(`Tunggu ${Math.ceil(current.remainingMs / 1000)} saat sebelum menghantar semula.`);
     return;
   }
-  await sendEmailVerification(user, {
-    url: "https://teachershub-itq.web.app/auth.html?verified=1",
-    handleCodeInApp: false
-  });
-  verificationSentAt = now;
-  setStatus("Permintaan penghantaran e-mel pengesahan berjaya. Semak Inbox dan Junk/Spam.", "success");
+  setStatus("Akaun siap. Sedang meminta e-mel pengesahan…");
+  const slowMessage = window.setTimeout(() => {
+    setStatus("Permintaan e-mel masih diproses. Sila tunggu; tidak perlu menekan hantar semula.");
+  }, 8000);
+  try {
+    const result = await verificationSender.request(user);
+    if (result.sent) {
+      setStatus(`Permintaan e-mel diterima pada ${sentTimeLabel.format(new Date(result.sentAt))} (Brunei). Semak Inbox dan Junk/Spam. Pengesahan akan diperiksa secara automatik.`, "success");
+    }
+  } finally {
+    window.clearTimeout(slowMessage);
+  }
 }
 
 byId("login-tab").addEventListener("click", () => showForm("login"));
@@ -122,6 +161,7 @@ loginForm.addEventListener("submit", async (event) => {
 
 registerForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (registrationInProgress) return;
   const name = registerForm.elements.namedItem("name").value.trim();
   const phone = registerForm.elements.namedItem("phone").value.trim();
   const email = registerForm.elements.namedItem("email").value.trim().toLowerCase();
@@ -135,6 +175,8 @@ registerForm.addEventListener("submit", async (event) => {
     return;
   }
   const submit = registerForm.querySelector('[type="submit"]');
+  registrationInProgress = true;
+  initialVerificationPending = true;
   submit.disabled = true;
   setStatus("Sedang menyediakan akaun…");
   try {
@@ -146,6 +188,9 @@ registerForm.addEventListener("submit", async (event) => {
     } catch (error) {
       verificationFailed = true;
       setStatus(`E-mel belum dapat dihantar: ${friendlyError(error)} Cuba tekan “Hantar semula e-mel”.`, "error");
+    } finally {
+      initialVerificationPending = false;
+      updateResendButton();
     }
 
     try {
@@ -170,7 +215,10 @@ registerForm.addEventListener("submit", async (event) => {
       ? `Akaun sudah dibuat, tetapi pendaftaran belum selesai: ${friendlyError(error)} Cuba tekan “Hantar semula e-mel”.`
       : friendlyError(error), "error");
   } finally {
+    registrationInProgress = false;
+    initialVerificationPending = false;
     submit.disabled = false;
+    updateResendButton();
   }
 });
 
@@ -190,33 +238,55 @@ byId("forgot-password").addEventListener("click", async () => {
 });
 
 byId("resend-verification").addEventListener("click", async () => {
-  const button = byId("resend-verification");
-  button.disabled = true;
+  if (initialVerificationPending || verificationSender.state(auth.currentUser).sending) return;
   try {
     if (auth.currentUser) await sendVerification(auth.currentUser, true);
     else setStatus("Sesi sudah tamat. Log masuk semula untuk meminta e-mel pengesahan.", "error");
   } catch (error) {
     setStatus(`E-mel belum dapat dihantar: ${friendlyError(error)}`, "error");
   } finally {
-    button.disabled = false;
+    updateResendButton();
   }
 });
 
-byId("check-verification").addEventListener("click", async () => {
+async function checkVerification(manual = false) {
+  if (checkingVerification || verificationSender.state(auth.currentUser).sending || initialVerificationPending) return;
+  if (!auth.currentUser) {
+    if (manual) setStatus("Sesi sudah tamat. Log masuk semula untuk menyemak pengesahan.", "error");
+    return;
+  }
+  checkingVerification = true;
+  lastVerificationCheck = Date.now();
   const button = byId("check-verification");
   button.disabled = true;
-  setStatus("Memeriksa pengesahan…");
+  if (manual) setStatus("Memeriksa pengesahan…");
   try {
-    if (!auth.currentUser) throw new Error("auth/no-current-user");
-    await reload(auth.currentUser);
-    if (isAllowedUser(auth.currentUser)) window.location.replace("/");
-    else setStatus("E-mel belum disahkan. Tekan pautan dalam e-mel dahulu.");
+    const user = auth.currentUser;
+    await reload(user);
+    // Refresh the verified claim before the portal reads protected Firestore data.
+    if (auth.currentUser?.uid === user.uid && isAllowedUser(user)) {
+      await getIdToken(user, true);
+      window.location.replace("/");
+    } else if (manual) setStatus("E-mel belum disahkan. Tekan pautan dalam e-mel dahulu.");
   } catch (error) {
-    setStatus(friendlyError(error), "error");
+    if (manual) setStatus(friendlyError(error), "error");
   } finally {
+    checkingVerification = false;
     button.disabled = false;
   }
-});
+}
+
+byId("check-verification").addEventListener("click", () => checkVerification(true));
+
+const checkWhenVisible = () => {
+  if (!document.hidden && !verifyView.hidden && Date.now() - lastVerificationCheck >= 5000) checkVerification();
+};
+window.setInterval(() => {
+  if (!document.hidden && !verifyView.hidden) updateResendButton();
+}, 1000);
+window.setInterval(checkWhenVisible, 5000);
+window.addEventListener("focus", checkWhenVisible);
+document.addEventListener("visibilitychange", checkWhenVisible);
 
 byId("verify-signout").addEventListener("click", async () => {
   await signOut(auth);
@@ -226,7 +296,7 @@ byId("verify-signout").addEventListener("click", async () => {
 });
 
 onAuthStateChanged(auth, (user) => {
-  if (isAllowedUser(user)) {
+  if (isAllowedUser(user) && !checkingVerification) {
     window.location.replace("/");
     return;
   }

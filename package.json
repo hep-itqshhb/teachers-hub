@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "scripts": {
     "build": "esbuild src/public-content.js src/admin.js src/auth.js src/auth-guard.js src/weekly-calendar.js --bundle --format=iife --outdir=assets --minify --target=es2020",
-    "test": "node --test tests/calendar-week.test.mjs"
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "firebase": "13.0.0"

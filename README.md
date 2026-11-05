@@ -4,6 +4,10 @@
 
 Laman utama memerlukan akaun e-mel `@itqshhb.edu.bn` yang sudah disahkan. Pengguna mendaftar di [halaman akaun](https://teachershub-itq.web.app/auth.html) dengan nama, nombor telefon, e-mel rasmi dan kata laluan. Firebase menghantar pautan pengesahan sebelum akses penuh dibuka.
 
+Permintaan e-mel pengesahan bermula sebaik akaun dicipta, sebelum simpanan profil. Hanya satu permintaan boleh berjalan pada satu masa. Kiraan 30 saat untuk penghantaran semula bermula selepas Firebase menerima permintaan dan disimpan sepanjang sesi tab, termasuk selepas refresh. Pengguna melihat waktu permintaan diterima; ini bukan pengesahan bahawa e-mel sudah tiba dalam inbox.
+
+Semasa halaman pengesahan kelihatan, status akaun diperiksa setiap lima saat dan apabila pengguna kembali ke tab. Selepas e-mel disahkan, token dikemas kini sebelum portal dibuka. Laman tidak mengukur atau menjamin masa penghantaran ke inbox oleh pembekal e-mel.
+
 Portal warga pendidik ITQSHHB di [teachershub-itq.web.app](https://teachershub-itq.web.app/). Pautan laporan pelajar membuka sistem borang sedia ada. Portal ini tidak menyimpan laporan atau data pelajar.
 
 ## Urus kandungan
