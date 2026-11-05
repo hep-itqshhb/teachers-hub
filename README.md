@@ -16,6 +16,16 @@ Entri boleh ditambah, diubah, dinyahaktifkan atau dibuang. Tarikh penting yang b
 
 Kandungan disimpan di Cloud Firestore, database `teachers-hub-content` (Singapore). Dokumen `siteContent/current` dan `quickLinks/current` boleh dibaca oleh guru yang telah mengesahkan e-mel ITQSHHB; hanya akaun Google admin yang telah disahkan boleh mengubahnya. Statistik agregat disimpan dalam `linkStats/{serviceId}` dan hanya admin boleh membacanya. Tiada identiti pengguna disimpan bersama klik. Sebelum simpanan pertama atau apabila Firestore tidak tersedia, laman utama menggunakan kandungan dan pautan sandaran dalam `config.js`.
 
+## Aktiviti minggu ini
+
+Laman utama membaca tab **Aktiviti** dalam Kalendar ITQSHHB melalui endpoint JSON baca sahaja Apps Script yang sedia ada (`calendarFeedUrl` dalam `config.js`). Sheet dan tetapan perkongsiannya tidak diubah. Tiada salinan data aktiviti dimasukkan dalam repo.
+
+Paparan menunjukkan satu minggu Isnin–Ahad mengikut **Asia/Brunei**, termasuk masa, tempat dan kategori. Aktiviti berbilang hari muncul pada setiap hari terlibat; aktiviti berstatus batal disembunyikan. Hari tanpa aktiviti dinyatakan dengan jelas. Tarikh penting yang diurus melalui Admin kekal berasingan.
+
+Data dimuat semula setiap lima minit, apabila sambungan pulih dan apabila laman dibuka semula. Hari/minggu diperiksa setiap 15 saat semasa laman kelihatan, jadi ia bertukar ke minggu baharu selepas tengah malam Isnin tanpa navigasi manual. Jika sambungan terganggu, paparan menyatakan masa data terakhir; minggu yang dipaparkan tetap mengikut tarikh semasa. Tiada minggu lain dipaparkan sebagai ganti minggu kosong.
+
+Jalankan `npm test` untuk menguji sempadan minggu, zon waktu, rentang aktiviti dan penapisan data.
+
 ## Konfigurasi pautan
 
 Pautan borang disiplin, hafazan, akademik dan aktiviti, kalendar, serta laman BPP boleh diubah dalam Ruang Admin. Nilai dalam `config.js` menjadi sandaran apabila tetapan Firestore belum ada atau tidak dapat dimuatkan. Pautan kosong dipaparkan sebagai **Pautan Belum Tersedia**.

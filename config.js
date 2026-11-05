@@ -5,6 +5,8 @@
 const HUB_CONFIG = Object.freeze({
   siteName: "ITQSHHB Teacher's Hub",
   canonicalUrl: "https://teachershub-itq.web.app/",
+  // Read-only live feed from the existing Kalendar ITQSHHB Apps Script.
+  calendarFeedUrl: "https://script.google.com/macros/s/AKfycbxbKeQNSAoQcmg91LcHAv_J9B2QUw8mhATyG44a12zPc-_kA7kOkeV2Q7JlIdPuj22H-g/exec?format=json",
   // Pilihan: masukkan URL CSV Google Sheet yang telah "Publish to web".
   // Lajur yang disokong: type,title,date,summary,link,status,expiresAt.
   contentFeedUrl: "",

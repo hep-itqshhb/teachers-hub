@@ -1,4 +1,14 @@
 .install-button { min-height: 38px; padding: 0 14px; border: 1px solid rgb(255 255 255 / 55%); border-radius: 999px; background: rgb(255 255 255 / 12%); color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.section-shortcuts { width: min(1160px, calc(100% - 56px)); display: flex; flex-wrap: wrap; gap: 9px; margin: 22px auto 0; }
+.section-shortcuts a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 17px; border: 1px solid var(--line); border-radius: 999px; background: var(--white); color: var(--primary-deep); font-size: 13px; font-weight: 700; text-decoration: none; }
+.section-shortcuts a:first-child { border-color: var(--primary); background: var(--primary); color: var(--white); }
+.section-shortcuts a:hover { border-color: var(--primary); background: var(--primary-soft); color: var(--primary-deep); }
+.content-more { min-height: 44px; display: block; margin: 22px auto 0; padding: 0 20px; border: 1px solid var(--primary); border-radius: 999px; background: var(--white); color: var(--primary); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.content-more[hidden] { display: none; }
+.content-more:hover { background: var(--primary-soft); }
+.service-card--featured { border-color: var(--primary); box-shadow: 0 12px 32px rgb(43 96 119 / 11%); }
+.service-card--featured .card-link { min-height: 46px; padding: 0 17px; border-radius: 999px; background: var(--primary); color: var(--white); }
+.service-card--featured .card-link:hover { background: var(--primary-deep); }
 .install-button:hover { background: rgb(255 255 255 / 22%); }
 .content-loading, .content-empty { grid-column: 1 / -1; margin: 0; padding: 24px; border: 1px dashed var(--tower); border-radius: 14px; color: var(--muted); text-align: center; }
 .announcements-section { padding: 68px 0 70px; border-top: 1px solid var(--line); background: #eef3f4; }
@@ -49,6 +59,8 @@ body.faq-dialog-open { overflow: hidden; }
   .faq-featured-button { min-height: 82px; }
 }
 @media (max-width: 560px) {
+  .section-shortcuts { width: min(100% - 36px, 480px); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+  .section-shortcuts a { justify-content: center; padding: 0 9px; font-size: 12px; text-align: center; }
   .top-nav a[href="#footer"] { display: none; }
   .install-button { padding: 0 11px; }
   .announcements-section { padding: 52px 0 53px; }
@@ -67,3 +79,5 @@ body.faq-dialog-open { overflow: hidden; }
   .announcements-list, .support-actions { width: calc(100% - 28px); }
 }
 
+.important-date-card[hidden], .announcement-card[hidden] { display: none; }
+.services-section { padding-top: 38px; }

@@ -24,6 +24,26 @@ const announcementList = byId("announcement-list");
 const linksList = byId("links-list");
 let currentContent = { importantDates: [], announcements: [] };
 let clickStats = Object.fromEntries(quickLinks.map(({ id }) => [id, 0]));
+let linksDirty = false;
+let contentDirty = false;
+
+function markDirty(type) {
+  if (type === "links") {
+    linksDirty = true;
+    byId("links-updated").textContent = "Perubahan pautan belum disimpan.";
+    byId("links-form").classList.add("is-dirty");
+  } else {
+    contentDirty = true;
+    byId("content-save-status").textContent = "Perubahan tarikh atau makluman belum disimpan.";
+    byId("content-form").classList.add("is-dirty");
+  }
+}
+
+window.addEventListener("beforeunload", (event) => {
+  if (!linksDirty && !contentDirty) return;
+  event.preventDefault();
+  event.returnValue = "";
+});
 
 function setStatus(message, kind = "info") {
   status.textContent = message;
@@ -60,6 +80,7 @@ function addEntry(type, item = {}, focus = true) {
   row.querySelector(".remove-entry").addEventListener("click", () => {
     row.remove();
     updateCounts();
+    markDirty("content");
     setStatus("Perubahan belum disimpan. Tekan Simpan perubahan untuk menerbitkan.");
   });
   list.append(row);
@@ -167,6 +188,10 @@ async function loadStats() {
     byId("stats-note").textContent = "Jumlah klik, bukan bilangan pengguna unik.";
   } catch {
     byId("stats-note").textContent = "Statistik belum dapat dimuatkan. Cuba muat semula.";
+    byId("metric-total-clicks").textContent = "—";
+    byId("metric-top-link").textContent = "Tiada data";
+    byId("metric-top-clicks").textContent = "Cuba muat semula statistik";
+    byId("click-chart").replaceChildren();
   } finally {
     button.disabled = false;
   }
@@ -215,11 +240,13 @@ getRedirectResult(auth).catch((error) => {
 
 byId("sign-out").addEventListener("click", () => signOut(auth));
 byId("denied-sign-out").addEventListener("click", () => signOut(auth));
-byId("add-date").addEventListener("click", () => addEntry("date"));
-byId("add-announcement").addEventListener("click", () => addEntry("announcement"));
+byId("add-date").addEventListener("click", () => { addEntry("date"); markDirty("content"); });
+byId("add-announcement").addEventListener("click", () => { addEntry("announcement"); markDirty("content"); });
 byId("refresh-stats").addEventListener("click", loadStats);
-byId("links-form").addEventListener("input", updateDashboard);
-byId("links-form").addEventListener("change", updateDashboard);
+byId("links-form").addEventListener("input", () => { updateDashboard(); markDirty("links"); });
+byId("links-form").addEventListener("change", () => { updateDashboard(); markDirty("links"); });
+byId("content-form").addEventListener("input", () => markDirty("content"));
+byId("content-form").addEventListener("change", () => markDirty("content"));
 
 byId("links-form").addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -229,6 +256,8 @@ byId("links-form").addEventListener("submit", async (event) => {
   setStatus("Menyimpan pautan Akses Pantas…");
   try {
     await setDoc(quickLinksRef, { links: collectLinks(), updatedAt: serverTimestamp() });
+    linksDirty = false;
+    byId("links-form").classList.remove("is-dirty");
     byId("links-updated").textContent = "Pautan dikemas kini. Muat semula laman utama untuk melihat perubahan.";
     setStatus("Pautan Akses Pantas berjaya diterbitkan.", "success");
     updateDashboard();
@@ -247,6 +276,9 @@ byId("content-form").addEventListener("submit", async (event) => {
   try {
     const content = collectContent();
     await setDoc(contentRef, { ...content, updatedAt: serverTimestamp() });
+    contentDirty = false;
+    byId("content-form").classList.remove("is-dirty");
+    byId("content-save-status").textContent = "Semua perubahan tarikh dan makluman telah disimpan.";
     currentContent = content;
     updateDashboard();
     setStatus("Perubahan berjaya diterbitkan. Muat semula laman utama untuk melihatnya.", "success");

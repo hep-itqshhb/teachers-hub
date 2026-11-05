@@ -7,9 +7,9 @@
   <meta name="robots" content="noindex">
   <title>Admin | Teacher's Hub ITQSHHB</title>
   <link rel="icon" type="image/png" href="teachers-hub-round-logo.png">
-  <link rel="stylesheet" href="admin.css?v=2">
+  <link rel="stylesheet" href="admin.css?v=3">
   <script src="config.js?v=2" defer></script>
-  <script src="assets/admin.js?v=4" defer></script>
+  <script src="assets/admin.js?v=5" defer></script>
 </head>
 <body>
   <header class="admin-header">
@@ -80,7 +80,7 @@
         </div>
         <form id="links-form">
           <div id="links-list" class="links-list"></div>
-          <div class="section-save"><span id="links-updated">Tekan Simpan pautan untuk menerbitkan perubahan.</span><button id="save-links" class="primary-button" type="submit">Simpan pautan</button></div>
+          <div class="section-save"><span id="links-updated" role="status" aria-live="polite">Tekan Simpan pautan untuk menerbitkan perubahan.</span><button id="save-links" class="primary-button" type="submit">Simpan pautan</button></div>
         </form>
       </section>
 
@@ -104,7 +104,7 @@
         </section>
 
         <div class="save-bar">
-          <p>Perubahan muncul di laman utama selepas disimpan.</p>
+          <p id="content-save-status" role="status" aria-live="polite">Perubahan muncul di laman utama selepas disimpan.</p>
           <button id="save-content" class="primary-button" type="submit">Simpan perubahan</button>
         </div>
       </form>

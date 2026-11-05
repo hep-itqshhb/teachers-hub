@@ -86,6 +86,27 @@
     }
   };
 
+  const limitCards = (container, button, limit, label) => {
+    const cards = [...container.children];
+    if (cards.length <= limit) {
+      button.hidden = true;
+      return;
+    }
+    let expanded = false;
+    const update = () => {
+      cards.forEach((card, index) => { card.hidden = !expanded && index >= limit; });
+      button.textContent = expanded ? `Tunjukkan lebih sedikit ${label}` : `Lihat semua ${cards.length} ${label}`;
+      button.setAttribute("aria-expanded", String(expanded));
+    };
+    button.hidden = false;
+    button.onclick = () => {
+      expanded = !expanded;
+      update();
+      if (!expanded) container.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+    update();
+  };
+
   const renderDates = (items) => {
     const container = document.getElementById("important-dates-grid");
     container.replaceChildren();
@@ -128,6 +149,7 @@
       card.append(top, title, deadline);
       container.append(card);
     });
+    limitCards(container, document.getElementById("dates-more"), 4, "tarikh penting");
   };
 
   const renderAnnouncements = (items) => {
@@ -165,6 +187,7 @@
       }
       container.append(card);
     });
+    limitCards(container, document.getElementById("announcements-more"), 4, "makluman");
   };
 
   const showToast = (message) => {

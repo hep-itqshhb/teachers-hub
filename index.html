@@ -17,14 +17,16 @@
   <link rel="apple-touch-icon" href="teachers-hub-round-logo.png">
   <link rel="icon" type="image/png" href="teachers-hub-round-logo.png">
   <link rel="stylesheet" href="styles.css?v=11">
-  <link rel="stylesheet" href="upgrade.css?v=2">
+  <link rel="stylesheet" href="upgrade.css?v=3">
+  <link rel="stylesheet" href="weekly-calendar.css?v=1">
   <script src="assets/auth-guard.js?v=2" defer></script>
-  <script src="config.js?v=2" defer></script>
+  <script src="config.js?v=3" defer></script>
   <script src="app.js?v=7" defer></script>
   <script src="assets/public-content.js?v=2" defer></script>
-  <script src="upgrade.js?v=2" defer></script>
-  <script src="faq.js?v=3" defer></script>
-   
+  <script src="assets/weekly-calendar.js?v=1" defer></script>
+  <script src="upgrade.js?v=3" defer></script>
+  <script src="faq.js?v=4" defer></script>
+
 <style>.visitor-counter-wrap{display:flex;justify-content:flex-end;align-items:center}.visitor-counter-link{min-height:44px;display:inline-flex;align-items:center;border-radius:10px}.visitor-counter-link img{display:block;width:210px;max-width:100%;height:auto}.faq-featured-button svg{width:18px!important;height:18px!important;max-width:18px!important;max-height:18px!important;flex:0 0 18px}@media(max-width:780px){.visitor-counter-wrap{justify-content:flex-start}}</style></head>
 <body>
   <a class="skip-link" href="#services">Langkau ke akses pantas</a>
@@ -36,8 +38,9 @@
       </a>
       <nav class="top-nav" aria-label="Navigasi utama">
         <a href="#services">Akses Pantas</a>
+        <a href="#important-dates-title">Tarikh</a>
         <a href="#announcements">Makluman</a>
-        <a href="#footer">Maklumat</a>
+        <a href="#faq">Bantuan</a>
         <span class="member-menu"><span id="member-name"></span><button id="member-signout" type="button">Keluar</button></span>
         <button class="install-button" id="install-app" type="button" hidden>Pasang</button>
       </nav>
@@ -57,30 +60,12 @@
       </div>
     </section>
 
-    <section class="important-dates-section" aria-labelledby="important-dates-title">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">MAKLUMAN TARIKH PENTING</p>
-          <h2 id="important-dates-title">Tarikh penting</h2>
-        </div>
-      </div>
-      <div class="important-dates-grid" id="important-dates-grid" aria-live="polite">
-        <p class="content-loading">Memuatkan tarikh penting…</p>
-      </div>
-    </section>
-
-    <section class="announcements-section" id="announcements" aria-labelledby="announcements-title">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">PENGUMUMAN TERKINI</p>
-          <h2 id="announcements-title">Makluman warga pendidik</h2>
-        </div>
-        <p class="section-intro">Maklumat ringkas berkaitan portal, borang dan urusan semasa.</p>
-      </div>
-      <div class="announcements-list" id="announcements-list" aria-live="polite">
-        <p class="content-loading">Memuatkan pengumuman…</p>
-      </div>
-    </section>
+    <nav class="section-shortcuts" aria-label="Terus ke bahagian">
+      <a href="#services">Akses Pantas</a>
+      <a href="#weekly-calendar">Aktiviti minggu ini</a>
+      <a href="#announcements">Makluman</a>
+      <a href="#faq">Pusat Bantuan</a>
+    </nav>
 
     <section class="services-section" id="services" aria-labelledby="services-title">
       <div class="section-heading">
@@ -134,6 +119,52 @@
         <button class="secondary-action" id="report-issue" type="button">Laporkan pautan bermasalah</button>
         <p>Butiran teknikal akan disalin supaya mudah dihantar melalui saluran rasmi Institut.</p>
       </div>
+    </section>
+
+    <section class="weekly-calendar-section" id="weekly-calendar" aria-labelledby="weekly-calendar-title" aria-busy="true">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">KALENDAR ITQSHHB</p>
+          <h2 id="weekly-calendar-title">Aktiviti minggu ini</h2>
+          <p class="weekly-calendar-range" id="weekly-calendar-range"></p>
+          <p class="weekly-calendar-note">Isnin–Ahad · Waktu Brunei · Bertukar automatik setiap minggu</p>
+        </div>
+        <a class="weekly-calendar-link" id="weekly-calendar-link" href="https://script.google.com/macros/s/AKfycbxbKeQNSAoQcmg91LcHAv_J9B2QUw8mhATyG44a12zPc-_kA7kOkeV2Q7JlIdPuj22H-g/exec" target="_blank" rel="noopener noreferrer">Buka kalendar penuh ↗</a>
+      </div>
+      <div class="weekly-calendar-days" id="weekly-calendar-days">
+        <p class="content-loading">Memuatkan aktiviti minggu ini…</p>
+      </div>
+      <div class="weekly-calendar-footer">
+        <p class="weekly-calendar-status" id="weekly-calendar-status" role="status">Menyambung ke Kalendar ITQSHHB…</p>
+        <button class="weekly-calendar-refresh" id="weekly-calendar-refresh" type="button">Muat semula</button>
+      </div>
+    </section>
+
+    <section class="important-dates-section" aria-labelledby="important-dates-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">MAKLUMAN TARIKH PENTING</p>
+          <h2 id="important-dates-title">Tarikh penting</h2>
+        </div>
+      </div>
+      <div class="important-dates-grid" id="important-dates-grid" aria-live="polite">
+        <p class="content-loading">Memuatkan tarikh penting…</p>
+      </div>
+      <button class="content-more" id="dates-more" type="button" hidden></button>
+    </section>
+
+    <section class="announcements-section" id="announcements" aria-labelledby="announcements-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">PENGUMUMAN TERKINI</p>
+          <h2 id="announcements-title">Makluman warga pendidik</h2>
+        </div>
+        <p class="section-intro">Maklumat ringkas berkaitan portal, borang dan urusan semasa.</p>
+      </div>
+      <div class="announcements-list" id="announcements-list" aria-live="polite">
+        <p class="content-loading">Memuatkan pengumuman…</p>
+      </div>
+      <button class="content-more" id="announcements-more" type="button" hidden></button>
     </section>
 
     <section class="faq-section" id="faq" aria-labelledby="faq-title">
@@ -200,7 +231,7 @@
       </dialog>
     </section>
 
-    
+
   </main>
 
 <section class="visitor-section" aria-labelledby="visitor-title"><div class="visitor-panel"><div class="visitor-heading"><p class="section-kicker">STATISTIK LAMAN</p><h2 id="visitor-title">Kunjungan ke Teacher's Hub</h2><p class="visitor-note">Paparan laman hari ini dan jumlah keseluruhan.</p></div><div class="visitor-counter-wrap"><a class="visitor-counter-link" href="https://hits.sh/teachershub-itq.web.app/" target="_blank" rel="noopener noreferrer" aria-label="Lihat statistik paparan Teacher's Hub"><img src="https://hits.sh/teachershub-itq.web.app.svg?view=today-total&amp;style=for-the-badge&amp;label=Paparan&amp;color=%23c9a227&amp;labelColor=%230f4c3a" alt="Kaunter paparan laman: jumlah hari ini dan keseluruhan" loading="lazy" referrerpolicy="no-referrer"></a></div></div></section><footer class="site-footer" id="footer">

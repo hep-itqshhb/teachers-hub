@@ -87,6 +87,8 @@ h2{font-size:clamp(26px,3vw,34px);margin:8px 0 10px}
 .field select:focus{border-color:#245f69;box-shadow:0 0 0 3px #245f6926}
 .section-save{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;padding-top:18px;border-top:1px solid #e2eae6}
 .section-save span{color:#738783;font-size:12px;line-height:1.5}
+.is-dirty .section-save,.is-dirty .save-bar{border-color:#c5a54b;background:#fffaf0}
+.is-dirty #links-updated,.is-dirty #content-save-status{color:#735514;font-weight:700}
 #dates-title,#announcements-title{scroll-margin-top:18px}
 @media(max-width:900px){.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.links-list{grid-template-columns:1fr}}
 @media(max-width:560px){.dashboard-section{padding:19px}.metric-grid{gap:9px}.metric-card{min-height:122px;padding:14px}.metric-card strong{font-size:26px}.metric-card .metric-name{font-size:16px}.chart-card{padding:17px}.chart-heading{align-items:flex-start;flex-direction:column}.chart-heading span{text-align:left}.chart-row{grid-template-columns:minmax(90px,125px) minmax(0,1fr) 32px;gap:8px;font-size:11px}.section-save{align-items:stretch;flex-direction:column}.section-save .primary-button{width:100%}}
