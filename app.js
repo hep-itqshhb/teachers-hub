@@ -41,16 +41,25 @@
 
   const renderServiceDialog = (service) => {
     const info = serviceInfo[service];
+    const t = window.hubLanguage?.t || ((ms) => ms);
     const fallback = HUB_CONFIG?.serviceStatus?.[service] || { status: "active", note: "" };
     const setting = settings[service] || { url: HUB_CONFIG?.links?.[service] || "", ...fallback };
     const stateName = ["active", "maintenance", "closed"].includes(setting.status) ? setting.status : "closed";
-    document.getElementById("service-dialog-title").textContent = info.title;
-    document.getElementById("service-dialog-description").textContent = info.description;
+    const english = {
+      disiplin: ["Discipline Case Report", "Report student misconduct using this form for the attention and action of Student Affairs."],
+      hafazan: ["Quran Memorisation Progress", "Record a student's Quran memorisation and recitation progress using this form."],
+      akademik: ["Academic Progress", "Report a student's progress, achievement, or academic support needs."],
+      aktiviti: ["Student Activity Report", "A detailed report form for activities, to be completed by the Head of Department (HOD) or activity organiser."],
+      kalendar: ["Activity Calendar", "View the institute activity calendar in one place."],
+      bpp: ["Student Development Division", "Access official information, activities, notices, and resources from the Student Development Division."]
+    }[service];
+    document.getElementById("service-dialog-title").textContent = t(info.title, english[0]);
+    document.getElementById("service-dialog-description").textContent = t(info.description, english[1]);
     document.getElementById("service-dialog-icon").src = `icons/${service}.svg?v=1`;
     const meta = document.getElementById("service-dialog-meta");
     const status = document.createElement("span");
     status.className = "service-status";
-    status.textContent = stateName === "maintenance" ? "Penyelenggaraan" : stateName === "closed" ? "Ditutup" : "Aktif";
+    status.textContent = t(stateName === "maintenance" ? "Penyelenggaraan" : stateName === "closed" ? "Ditutup" : "Aktif", stateName === "maintenance" ? "Maintenance" : stateName === "closed" ? "Closed" : "Active");
     meta.className = `service-dialog-meta service-meta--${stateName}`;
     meta.replaceChildren(status);
     if (setting.note) {
@@ -69,8 +78,8 @@
       link.href = url;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
-      link.setAttribute("aria-label", `${labels[service]} (dibuka pada tab baharu)`);
-      const action = service === "kalendar" ? "Lihat kalendar" : service === "bpp" ? "Buka laman BPP" : "Buka borang";
+      link.setAttribute("aria-label", `${t(labels[service], { disiplin: "Open discipline case report form", hafazan: "Open Quran memorisation progress form", akademik: "Open academic progress form", aktiviti: "Open student activity report form", kalendar: "Open institute activity calendar", bpp: "Open Student Development Division website" }[service])} (${t("dibuka pada tab baharu", "opens in a new tab")})`);
+      const action = t(service === "kalendar" ? "Lihat kalendar" : service === "bpp" ? "Buka laman BPP" : "Buka borang", service === "kalendar" ? "View calendar" : service === "bpp" ? "Open BPP website" : "Open form");
       link.innerHTML = `${action} ${actionIcons.external}`;
       link.addEventListener("click", () => recordClick(service));
       slot.append(link);
@@ -78,7 +87,7 @@
     } else {
       const state = document.createElement("p");
       state.className = "service-unavailable";
-      state.textContent = stateName === "maintenance" ? "Pautan sedang diselenggara." : stateName === "closed" ? "Pautan ditutup." : "Pautan belum tersedia.";
+      state.textContent = t(stateName === "maintenance" ? "Pautan sedang diselenggara." : stateName === "closed" ? "Pautan ditutup." : "Pautan belum tersedia.", stateName === "maintenance" ? "This link is under maintenance." : stateName === "closed" ? "This link is closed." : "This link is unavailable.");
       slot.append(state);
       if (focusedAction) dialog.querySelector(".service-dialog-close").focus();
     }
@@ -91,6 +100,7 @@
     renderServiceDialog(activeService);
     dialog.showModal();
   }));
+  document.addEventListener("hub-language-change", () => { if (dialog.open && activeService) renderServiceDialog(activeService); });
   dialog.addEventListener("close", () => {
     activeService = null;
     serviceTrigger?.focus();
